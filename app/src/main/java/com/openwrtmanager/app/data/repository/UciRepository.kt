@@ -135,7 +135,7 @@ class UciRepository @Inject constructor(
     }
 
     /**
-     * 让配置改动实际生效（不仅仅是写入 /etc/config/*，还要让运行中的服务重新加载）。
+     * 让配置改动实际生效（不仅仅是写入 /etc/config/ 下的文件，还要让运行中的服务重新加载）。
      * 对 firewall 是 `/etc/init.d/firewall reload`，对 dhcp/network 通常是重启 dnsmasq / netifd。
      * 通过 luci 提供的 "luci" -> "reload_config" 或直接调用 file/exec 类接口。
      * 这里统一走 rpcd 的 "file" exec 能力（24.10 默认开启 file 对象，ACL 允许时可用）。
