@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    OpenWrt/LuCI 默认使用 HTTP，且用户自签证书 HTTPS 也很常见。
+    这里允许全局明文流量（局域网管理场景），同时保留系统默认的证书信任链校验。
+    如果未来要支持用户自签 HTTPS 证书信任（TOFU 模式），需要在 UbusClient 中
+    自定义 X509TrustManager，并在 SettingsScreen 中做证书指纹确认 UI。
+-->
+<network-security-config>
+    <base-config cleartextTrafficPermitted="true">
+        <trust-anchors>
+            <certificates src="system" />
+            <certificates src="user" />
+        </trust-anchors>
+    </base-config>
+</network-security-config>
