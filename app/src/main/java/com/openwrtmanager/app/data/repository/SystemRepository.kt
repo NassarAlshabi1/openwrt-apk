@@ -56,7 +56,7 @@ class SystemRepository @Inject constructor(
         return Result.success(status)
     }
 
-    /** 危险操作：重启路由器。UI 层必须做二次确认。 */
+    /** 危险操作：Restart router。UI 层必须做二次确认。 */
     suspend fun reboot(): Result<Unit> {
         val client = clientManager.requireClient()
         return when (val result = client.call("system", "reboot")) {

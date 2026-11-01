@@ -36,11 +36,11 @@ fun PluginsScreen(
     val uiState by viewModel.uiState.collectAsState()
 
     Scaffold(
-        topBar = { CenterAlignedTopAppBar(title = { Text("插件") }) }
+        topBar = { CenterAlignedTopAppBar(title = { Text("Plugins") }) }
     ) { padding ->
         when {
             uiState.isLoading -> FullScreenLoading()
-            uiState.errorMessage != null -> FullScreenError(uiState.errorMessage ?: "加载失败", onRetry = viewModel::refresh)
+            uiState.errorMessage != null -> FullScreenError(uiState.errorMessage ?: "Loading failed", onRetry = viewModel::refresh)
             uiState.plugins.isEmpty() -> androidx.compose.foundation.layout.Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -55,7 +55,7 @@ fun PluginsScreen(
                     tint = MaterialTheme.colorScheme.onSurfaceVariant
                 )
                 Text(
-                    "未检测到已安装的插件\n（包名以 luci-app- 开头的软件包）",
+                    "No installed plugins found\n(packages whose names start with luci-app-)",
                     textAlign = androidx.compose.ui.text.style.TextAlign.Center,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.padding(top = 8.dp)
@@ -72,7 +72,7 @@ fun PluginsScreen(
                         headlineContent = { Text(plugin.packageName) },
                         supportingContent = {
                             Text(
-                                plugin.description.ifBlank { "版本 ${plugin.version}" },
+                                plugin.description.ifBlank { "Version ${plugin.version}" },
                                 maxLines = 2
                             )
                         },

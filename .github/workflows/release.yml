@@ -1,0 +1,88 @@
+name: Build and publish APK
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      create_release:
+        description: Create a GitHub Release for this build
+        required: true
+        default: true
+        type: boolean
+
+permissions:
+  contents: write
+
+env:
+  JAVA_VERSION: '17'
+
+concurrency:
+  group: apk-release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build-release:
+    name: Build release APK
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: ${{ env.JAVA_VERSION }}
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Grant execute permission for Gradle wrapper
+        run: chmod +x ./gradlew
+
+      - name: Read app version
+        id: version
+        shell: bash
+        run: |
+          version_name=$(sed -n 's/.*versionName = "\([^"]*\)".*/\1/p' app/build.gradle.kts | head -n 1)
+          version_code=$(sed -n 's/.*versionCode = \([0-9]*\).*/\1/p' app/build.gradle.kts | head -n 1)
+          test -n "$version_name"
+          echo "name=$version_name" >> "$GITHUB_OUTPUT"
+          echo "code=$version_code" >> "$GITHUB_OUTPUT"
+          echo "tag=v${version_name}-${GITHUB_RUN_NUMBER}" >> "$GITHUB_OUTPUT"
+
+      - name: Build release APK
+        run: ./gradlew assembleRelease --no-daemon --stacktrace
+
+      - name: Prepare release artifact
+        run: |
+          mkdir -p out
+          cp app/build/outputs/apk/release/*.apk "out/openwrt-manager-${{ steps.version.outputs.name }}.apk"
+          sha256sum out/*.apk > out/SHA256SUMS.txt
+          du -h out/*.apk
+
+      - name: Report APK size
+        run: |
+          apk=$(find out -name '*.apk' -type f | head -n 1)
+          size_bytes=$(stat -c '%s' "$apk")
+          size_mb=$(awk "BEGIN { printf \"%.2f\", $size_bytes / 1048576 }")
+          {
+            echo "## APK size"
+            echo "- File: \\`$(basename \"$apk\")\\`"
+            echo "- Size: ${size_mb} MiB (${size_bytes} bytes)"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Publish GitHub Release
+        if: github.event_name == 'push' || inputs.create_release == true
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ startsWith(github.ref, 'refs/tags/') && github.ref_name || steps.version.outputs.tag }}
+          name: OpenWrt Manager ${{ steps.version.outputs.name }}
+          generate_release_notes: true
+          prerelease: false
+          files: |
+            out/*.apk
+            out/SHA256SUMS.txt

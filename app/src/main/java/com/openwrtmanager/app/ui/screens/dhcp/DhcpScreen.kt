@@ -50,14 +50,14 @@ fun DhcpScreen(viewModel: DhcpViewModel = hiltViewModel()) {
         topBar = { CenterAlignedTopAppBar(title = { Text("DHCP") }) },
         floatingActionButton = {
             FloatingActionButton(onClick = { showAddLeaseDialog = true }) {
-                Icon(Icons.Filled.Add, contentDescription = "新增静态租约")
+                Icon(Icons.Filled.Add, contentDescription = "Add static lease")
             }
         }
     ) { padding ->
         Column(modifier = Modifier.padding(padding)) {
             when {
                 uiState.isLoading -> FullScreenLoading()
-                uiState.errorMessage != null -> FullScreenError(uiState.errorMessage ?: "加载失败", onRetry = viewModel::refresh)
+                uiState.errorMessage != null -> FullScreenError(uiState.errorMessage ?: "Loading failed", onRetry = viewModel::refresh)
                 else -> {
                     if (uiState.hasPendingChanges) {
                         PendingChangesBar(
@@ -79,7 +79,7 @@ fun DhcpScreen(viewModel: DhcpViewModel = hiltViewModel()) {
                         }
                         item {
                             Text(
-                                "静态租约 (${uiState.staticLeases.size})",
+                                "Static leases (${uiState.staticLeases.size})",
                                 style = MaterialTheme.typography.titleSmall,
                                 modifier = Modifier.padding(16.dp)
                             )
@@ -106,17 +106,17 @@ fun DhcpScreen(viewModel: DhcpViewModel = hiltViewModel()) {
     pendingDelete?.let { lease ->
         AlertDialog(
             onDismissRequest = { pendingDelete = null },
-            title = { Text("删除静态租约 “${lease.name}”？") },
+            title = { Text("Delete static lease “${lease.name}”？") },
             confirmButton = {
                 TextButton(onClick = {
                     viewModel.deleteStaticLease(lease)
                     pendingDelete = null
-                }) { Text("删除", color = MaterialTheme.colorScheme.error) }
+                }) { Text("Delete", color = MaterialTheme.colorScheme.error) }
             },
             dismissButton = {
-                TextButton(onClick = { pendingDelete = null }) { Text("取消") }
+                TextButton(onClick = { pendingDelete = null }) { Text("Cancel") }
             },
-            text = { Text("删除后需要点击“应用改动”才会真正生效。") }
+            text = { Text("Click “Apply changes” after deletion for it to take effect.") }
         )
     }
 }
@@ -134,10 +134,10 @@ private fun PendingChangesBar(isApplying: Boolean, onApply: () -> Unit, onDiscar
                 .padding(12.dp),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Text("有未生效的改动", modifier = Modifier.padding(top = 8.dp))
+            Text("Unsaved changes", modifier = Modifier.padding(top = 8.dp))
             Row {
-                TextButton(onClick = onDiscard, enabled = !isApplying) { Text("放弃") }
-                TextButton(onClick = onApply, enabled = !isApplying) { Text("应用改动") }
+                TextButton(onClick = onDiscard, enabled = !isApplying) { Text("Discard") }
+                TextButton(onClick = onApply, enabled = !isApplying) { Text("Apply changes") }
             }
         }
     }
@@ -148,11 +148,11 @@ private fun PoolItem(pool: DhcpPool, onToggleIgnored: () -> Unit) {
     ListItem(
         headlineContent = { Text(pool.interfaceName) },
         supportingContent = {
-            Text("起始: ${pool.start ?: "-"} · 数量: ${pool.limit ?: "-"} · 租期: ${pool.leaseTime ?: "默认"}")
+            Text("Start: ${pool.start ?: "-"} · Count: ${pool.limit ?: "-"} · Lease: ${pool.leaseTime ?: "Default"}")
         },
         trailingContent = {
             Row(verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
-                Text("启用 DHCP", style = MaterialTheme.typography.bodySmall)
+                Text("Enable DHCP", style = MaterialTheme.typography.bodySmall)
                 Switch(checked = !pool.ignore, onCheckedChange = { onToggleIgnored() })
             }
         }
@@ -166,7 +166,7 @@ private fun LeaseItem(lease: StaticLease, onDelete: () -> Unit) {
         supportingContent = { Text("${lease.macAddress} → ${lease.ipAddress}") },
         trailingContent = {
             IconButton(onClick = onDelete) {
-                Icon(Icons.Filled.Delete, contentDescription = "删除", tint = MaterialTheme.colorScheme.error)
+                Icon(Icons.Filled.Delete, contentDescription = "Delete", tint = MaterialTheme.colorScheme.error)
             }
         }
     )
@@ -184,22 +184,22 @@ private fun AddLeaseDialog(
 
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("新增静态租约") },
+        title = { Text("Add static lease") },
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                OutlinedTextField(value = name, onValueChange = { name = it }, label = { Text("设备名称") }, singleLine = true)
-                OutlinedTextField(value = mac, onValueChange = { mac = it }, label = { Text("MAC 地址") }, singleLine = true)
-                OutlinedTextField(value = ip, onValueChange = { ip = it }, label = { Text("IP 地址") }, singleLine = true)
+                OutlinedTextField(value = name, onValueChange = { name = it }, label = { Text("Device name") }, singleLine = true)
+                OutlinedTextField(value = mac, onValueChange = { mac = it }, label = { Text("MAC address") }, singleLine = true)
+                OutlinedTextField(value = ip, onValueChange = { ip = it }, label = { Text("IP address") }, singleLine = true)
             }
         },
         confirmButton = {
             TextButton(
-                onClick = { onConfirm(name.ifBlank { "设备" }, mac, ip) },
+                onClick = { onConfirm(name.ifBlank { "Device" }, mac, ip) },
                 enabled = mac.isNotBlank() && ip.isNotBlank()
-            ) { Text("添加") }
+            ) { Text("Add") }
         },
         dismissButton = {
-            TextButton(onClick = onDismiss) { Text("取消") }
+            TextButton(onClick = onDismiss) { Text("Cancel") }
         }
     )
 }

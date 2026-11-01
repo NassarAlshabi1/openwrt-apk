@@ -75,3 +75,7 @@ di/             Hilt 模块
   IPv6 相关配置）可能需要按需扩展 `UciSection` 的解析逻辑。
 - 默认信任局域网明文 HTTP；如果路由器配置了自签 HTTPS 证书，目前依赖 Android 系统的
   用户信任证书存储（需要用户手动导入证书），尚未做应用内的证书指纹确认 UI。
+
+## GitHub Actions release
+
+The `Build and publish APK` workflow builds the unsigned `release` variant and publishes the APK and SHA-256 checksum to GitHub Releases. Run it manually from the Actions tab, or push a tag matching `v*`. The Android UI is provided in English.

@@ -51,7 +51,7 @@ fun FullScreenError(message: String, onRetry: (() -> Unit)? = null) {
         if (onRetry != null) {
             androidx.compose.foundation.layout.Spacer(Modifier.padding(8.dp))
             Button(onClick = onRetry) {
-                Text("重试")
+                Text("Retry")
             }
         }
     }

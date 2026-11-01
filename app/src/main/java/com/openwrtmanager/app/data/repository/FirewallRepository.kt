@@ -7,7 +7,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 /**
- * 防火墙管理：本质是对 "firewall" 这个 UCI config 的语义化封装。
+ * Firewall管理：本质是对 "firewall" 这个 UCI config 的语义化封装。
  * Zone 对应 type == "zone" 的 section，Rule 对应 type == "rule" 的 section。
  */
 @Singleton
@@ -51,7 +51,7 @@ class FirewallRepository @Inject constructor(
         }
     )
 
-    /** 提交并使防火墙重新加载生效 */
+    /** 提交并使Firewall重新加载生效 */
     suspend fun commitAndApply(): Result<Unit> {
         val commitResult = uciRepository.commit("firewall")
         if (commitResult.isFailure) return commitResult
@@ -72,7 +72,7 @@ class FirewallRepository @Inject constructor(
 
     private fun UciSection.toRule(): FirewallRule = FirewallRule(
         sectionId = sectionId,
-        name = option("name") ?: "(未命名规则)",
+        name = option("name") ?: "(未命名Rules)",
         src = option("src"),
         dest = option("dest"),
         destPort = option("dest_port"),

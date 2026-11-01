@@ -25,10 +25,10 @@ data class BottomNavItem(
 )
 
 private val bottomNavItems = listOf(
-    BottomNavItem(Routes.DASHBOARD, "概览", Icons.Filled.Dashboard),
-    BottomNavItem(Routes.PACKAGES, "软件包", Icons.Filled.Inventory2),
-    BottomNavItem(Routes.PLUGINS, "插件", Icons.Filled.Extension),
-    BottomNavItem(Routes.FIREWALL, "防火墙", Icons.Filled.Security),
+    BottomNavItem(Routes.DASHBOARD, "Dashboard", Icons.Filled.Dashboard),
+    BottomNavItem(Routes.PACKAGES, "Packages", Icons.Filled.Inventory2),
+    BottomNavItem(Routes.PLUGINS, "Plugins", Icons.Filled.Extension),
+    BottomNavItem(Routes.FIREWALL, "Firewall", Icons.Filled.Security),
     BottomNavItem(Routes.DHCP, "DHCP", Icons.Filled.Dns)
 )
 

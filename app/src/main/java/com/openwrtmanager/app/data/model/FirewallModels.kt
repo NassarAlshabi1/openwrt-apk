@@ -13,8 +13,8 @@ data class FirewallZone(
 data class FirewallRule(
     val sectionId: String,
     val name: String,
-    val src: String?,          // 源区域，例如 "wan"
-    val dest: String?,         // 目的区域，例如 "lan"
+    val src: String?,          // 源Zones，例如 "wan"
+    val dest: String?,         // 目的Zones，例如 "lan"
     val destPort: String?,
     val proto: String?,        // tcp/udp/tcp udp/icmp/...
     val target: String,        // ACCEPT/REJECT/DROP

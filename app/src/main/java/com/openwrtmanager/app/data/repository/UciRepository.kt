@@ -16,7 +16,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 /**
- * UCI 是防火墙、DHCP、网络配置的统一底座。
+ * UCI 是Firewall、DHCP、网络配置的统一底座。
  * 所有配置类功能（Firewall/DHCP UI）都通过这一个 Repository 读写，
  * 上层只需要提供 configName（"firewall" / "dhcp" / "network"）。
  */
@@ -55,8 +55,8 @@ class UciRepository @Inject constructor(
     }
 
     /**
-     * 新建一个 section（例如新增一条防火墙规则或一条 DHCP 静态租约）。
-     * 返回新 section 的 id。注意：uci add 只是写入"未提交"的内存态，需要调用 commit() 落盘。
+     * 新建一个 section（例如Add一条FirewallRules或一条 DHCP Static leases）。
+     * Back新 section 的 id。注意：uci add 只是写入"未提交"的内存态，需要调用 commit() 落盘。
      */
     suspend fun addSection(
         configName: String,
@@ -101,7 +101,7 @@ class UciRepository @Inject constructor(
         }
     }
 
-    /** 删除一个 section（例如删除一条防火墙规则） */
+    /** Delete一个 section（例如Delete一条FirewallRules） */
     suspend fun deleteSection(configName: String, sectionId: String): Result<Unit> {
         val client = clientManager.requireClient()
         val params = buildJsonObject {
@@ -124,7 +124,7 @@ class UciRepository @Inject constructor(
         }
     }
 
-    /** 放弃内存态改动 */
+    /** Discard内存态改动 */
     suspend fun revert(configName: String): Result<Unit> {
         val client = clientManager.requireClient()
         val params = buildJsonObject { put("config", JsonPrimitive(configName)) }
@@ -136,9 +136,9 @@ class UciRepository @Inject constructor(
 
     /**
      * 让配置改动实际生效（不仅仅是写入 /etc/config/ 下的文件，还要让运行中的服务重新加载）。
-     * 对 firewall 是 `/etc/init.d/firewall reload`，对 dhcp/network 通常是重启 dnsmasq / netifd。
+     * 对 firewall 是 `/etc/init.d/firewall reload`，对 dhcp/network 通常是Restart dnsmasq / netifd。
      * 通过 luci 提供的 "luci" -> "reload_config" 或直接调用 file/exec 类接口。
-     * 这里统一走 rpcd 的 "file" exec 能力（24.10 默认开启 file 对象，ACL 允许时可用）。
+     * 这里统一走 rpcd 的 "file" exec 能力（24.10 Default开启 file 对象，ACL 允许时可用）。
      */
     suspend fun applyChanges(service: String): Result<Unit> {
         val client = clientManager.requireClient()

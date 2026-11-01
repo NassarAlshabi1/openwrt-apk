@@ -45,16 +45,16 @@ fun DashboardScreen(
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
-                title = { Text("路由器概览") },
+                title = { Text("Router overview") },
                 actions = {
                     IconButton(onClick = viewModel::refresh) {
-                        Icon(Icons.Filled.Refresh, contentDescription = "刷新")
+                        Icon(Icons.Filled.Refresh, contentDescription = "Refresh")
                     }
                     IconButton(onClick = {
                         viewModel.logout()
                         onLoggedOut()
                     }) {
-                        Icon(Icons.Filled.Logout, contentDescription = "退出登录")
+                        Icon(Icons.Filled.Logout, contentDescription = "Log out")
                     }
                 }
             )
@@ -64,7 +64,7 @@ fun DashboardScreen(
             when {
                 uiState.isLoading && uiState.status == null -> FullScreenLoading()
                 uiState.errorMessage != null && uiState.status == null ->
-                    FullScreenError(uiState.errorMessage ?: "加载失败", onRetry = viewModel::refresh)
+                    FullScreenError(uiState.errorMessage ?: "Loading failed", onRetry = viewModel::refresh)
                 uiState.status != null -> DashboardContent(
                     status = uiState.status!!,
                     onRebootClick = viewModel::requestReboot
@@ -76,15 +76,15 @@ fun DashboardScreen(
     if (uiState.rebootRequested) {
         AlertDialog(
             onDismissRequest = viewModel::cancelReboot,
-            title = { Text("确认重启路由器？") },
-            text = { Text("重启期间网络会短暂中断，所有设备会断线重连。此操作不可撤销。") },
+            title = { Text("Restart the router?") },
+            text = { Text("The network will be briefly interrupted and all devices will reconnect. This action cannot be undone.") },
             confirmButton = {
                 TextButton(onClick = viewModel::confirmReboot) {
-                    Text("确认重启", color = MaterialTheme.colorScheme.error)
+                    Text("Restart", color = MaterialTheme.colorScheme.error)
                 }
             },
             dismissButton = {
-                TextButton(onClick = viewModel::cancelReboot) { Text("取消") }
+                TextButton(onClick = viewModel::cancelReboot) { Text("Cancel") }
             }
         )
     }
@@ -108,7 +108,7 @@ private fun DashboardContent(status: SystemStatus, onRebootClick: () -> Unit) {
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                     Text(
-                        "运行时间：${formatUptime(status.uptimeSeconds)}",
+                        "Uptime: ${formatUptime(status.uptimeSeconds)}",
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -119,7 +119,7 @@ private fun DashboardContent(status: SystemStatus, onRebootClick: () -> Unit) {
         item {
             Card(modifier = Modifier.fillMaxWidth()) {
                 Column(modifier = Modifier.padding(16.dp)) {
-                    Text("负载 (1 / 5 / 15 分钟)", style = MaterialTheme.typography.titleSmall)
+                    Text("Load average (1 / 5 / 15 min)", style = MaterialTheme.typography.titleSmall)
                     Text(
                         status.loadAverage.joinToString(" / ") { String.format("%.2f", it) },
                         style = MaterialTheme.typography.bodyMedium
@@ -131,7 +131,7 @@ private fun DashboardContent(status: SystemStatus, onRebootClick: () -> Unit) {
         item {
             Card(modifier = Modifier.fillMaxWidth()) {
                 Column(modifier = Modifier.padding(16.dp)) {
-                    Text("内存使用", style = MaterialTheme.typography.titleSmall)
+                    Text("Memory usage", style = MaterialTheme.typography.titleSmall)
                     LinearProgressIndicator(
                         progress = { status.memoryUsedPercent / 100f },
                         modifier = Modifier
@@ -139,7 +139,7 @@ private fun DashboardContent(status: SystemStatus, onRebootClick: () -> Unit) {
                             .padding(vertical = 8.dp)
                     )
                     Text(
-                        "${status.memoryUsedPercent}% 已用 · 剩余 ${status.memoryFreeKb / 1024} MB",
+                        "${status.memoryUsedPercent}% used · remaining ${status.memoryFreeKb / 1024} MB",
                         style = MaterialTheme.typography.bodySmall
                     )
                 }
@@ -150,7 +150,7 @@ private fun DashboardContent(status: SystemStatus, onRebootClick: () -> Unit) {
             item {
                 Card(modifier = Modifier.fillMaxWidth()) {
                     Column(modifier = Modifier.padding(16.dp)) {
-                        Text("存储空间（用于软件包安装判断）", style = MaterialTheme.typography.titleSmall)
+                        Text("Storage (used to check package installation)", style = MaterialTheme.typography.titleSmall)
                         LinearProgressIndicator(
                             progress = { status.rootfsUsedPercent / 100f },
                             modifier = Modifier
@@ -158,7 +158,7 @@ private fun DashboardContent(status: SystemStatus, onRebootClick: () -> Unit) {
                                 .padding(vertical = 8.dp)
                         )
                         Text(
-                            "${status.rootfsUsedPercent}% 已用 · 剩余 ${status.rootfsFreeKb / 1024} MB",
+                            "${status.rootfsUsedPercent}% used · remaining ${status.rootfsFreeKb / 1024} MB",
                             style = MaterialTheme.typography.bodySmall
                         )
                     }
@@ -175,9 +175,9 @@ private fun DashboardContent(status: SystemStatus, onRebootClick: () -> Unit) {
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Column {
-                        Text("重启路由器", style = MaterialTheme.typography.titleSmall)
+                        Text("Restart router", style = MaterialTheme.typography.titleSmall)
                         Text(
-                            "危险操作，会导致网络短暂中断",
+                            "Dangerous operation; the network will be briefly interrupted",
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
@@ -185,7 +185,7 @@ private fun DashboardContent(status: SystemStatus, onRebootClick: () -> Unit) {
                     IconButton(onClick = onRebootClick) {
                         Icon(
                             Icons.Filled.PowerSettingsNew,
-                            contentDescription = "重启",
+                            contentDescription = "Restart",
                             tint = MaterialTheme.colorScheme.error
                         )
                     }

@@ -81,9 +81,9 @@ fun LoginScreen(
                         tint = MaterialTheme.colorScheme.primary
                     )
                     Spacer(Modifier.height(8.dp))
-                    Text("连接到你的 OpenWrt 路由器", style = MaterialTheme.typography.titleLarge)
+                    Text("Connect to your OpenWrt router", style = MaterialTheme.typography.titleLarge)
                     Text(
-                        "使用 LuCI 管理员账号登录",
+                        "Sign in with your LuCI administrator account",
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -94,7 +94,7 @@ fun LoginScreen(
                 OutlinedTextField(
                     value = uiState.name,
                     onValueChange = viewModel::onNameChange,
-                    label = { Text("名称（可选，例如：家里路由器）") },
+                    label = { Text("Name (optional, e.g. Home router)") },
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true
                 )
@@ -104,7 +104,7 @@ fun LoginScreen(
                 OutlinedTextField(
                     value = uiState.baseUrl,
                     onValueChange = viewModel::onBaseUrlChange,
-                    label = { Text("路由器地址") },
+                    label = { Text("Router address") },
                     placeholder = { Text("http://192.168.1.1") },
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true,
@@ -116,7 +116,7 @@ fun LoginScreen(
                 OutlinedTextField(
                     value = uiState.username,
                     onValueChange = viewModel::onUsernameChange,
-                    label = { Text("用户名") },
+                    label = { Text("Username") },
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true
                 )
@@ -126,7 +126,7 @@ fun LoginScreen(
                 OutlinedTextField(
                     value = uiState.password,
                     onValueChange = viewModel::onPasswordChange,
-                    label = { Text("密码") },
+                    label = { Text("Password") },
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true,
                     visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
@@ -163,7 +163,7 @@ fun LoginScreen(
                     if (uiState.isLoading) {
                         CircularProgressIndicator(modifier = Modifier.size(20.dp), color = MaterialTheme.colorScheme.onPrimary)
                     } else {
-                        Text("登录")
+                        Text("Sign in")
                     }
                 }
             }
@@ -171,7 +171,7 @@ fun LoginScreen(
             if (profiles.isNotEmpty()) {
                 item {
                     Text(
-                        "已保存的连接",
+                        "Saved connections",
                         style = MaterialTheme.typography.titleSmall,
                         modifier = Modifier.padding(top = 8.dp)
                     )
@@ -199,12 +199,12 @@ private fun SavedProfileItem(
             headlineContent = { Text(profile.name) },
             supportingContent = { Text("${profile.username}@${profile.baseUrl}") },
             trailingContent = {
-                TextButton(onClick = onDelete) { Text("删除") }
+                TextButton(onClick = onDelete) { Text("Delete") }
             },
             modifier = Modifier.fillMaxWidth()
         )
         Row(modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 4.dp)) {
-            TextButton(onClick = onClick) { Text("填充到表单") }
+            TextButton(onClick = onClick) { Text("Fill form") }
         }
     }
 }

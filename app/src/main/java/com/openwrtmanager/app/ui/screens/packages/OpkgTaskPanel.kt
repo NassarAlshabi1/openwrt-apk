@@ -60,7 +60,7 @@ fun OpkgTaskPanel(
                 when (taskState) {
                     is OpkgTaskState.Running -> {
                         CircularProgressIndicator(modifier = Modifier.padding(end = 8.dp))
-                        Text("正在执行…", style = MaterialTheme.typography.titleMedium)
+                        Text("Running…", style = MaterialTheme.typography.titleMedium)
                     }
                     is OpkgTaskState.Success -> {
                         Icon(Icons.Filled.CheckCircle, contentDescription = null, tint = Color(0xFF2E7D32))
@@ -73,7 +73,7 @@ fun OpkgTaskPanel(
                     is OpkgTaskState.Failed -> {
                         Icon(Icons.Filled.Error, contentDescription = null, tint = MaterialTheme.colorScheme.error)
                         Text(
-                            " 执行失败",
+                            " Operation failed",
                             style = MaterialTheme.typography.titleMedium,
                             modifier = Modifier.padding(start = 4.dp)
                         )
@@ -118,7 +118,7 @@ fun OpkgTaskPanel(
                         .fillMaxWidth()
                         .padding(top = 16.dp)
                 ) {
-                    Text("关闭")
+                    Text("Close")
                 }
             }
         }

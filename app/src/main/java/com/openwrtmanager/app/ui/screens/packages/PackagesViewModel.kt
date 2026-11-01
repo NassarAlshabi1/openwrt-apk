@@ -27,12 +27,12 @@ data class PackagesUiState(
     // 空间检查用
     val rootfsFreeKb: Long = 0L,
 
-    // 点击"安装"后，先异步查询包详情（体积等），再展示确认对话框
+    // 点击"Install"后，先异步查询包详情（体积等），再展示确认对话框
     val pendingInstallTarget: OpkgPackage? = null,
     val pendingInstallInfo: String? = null,
     val isFetchingPendingInstallInfo: Boolean = false,
 
-    // 当前展示的任务日志面板（安装/卸载/更新时弹出）
+    // 当前展示的任务日志面板（Install/Uninstall/Upgrade时弹出）
     val taskState: OpkgTaskState = OpkgTaskState.Idle,
     val taskPanelVisible: Boolean = false
 )
@@ -122,7 +122,7 @@ class PackagesViewModel @Inject constructor(
         return sizeKb > freeKb * 0.9
     }
 
-    /** 用户点击"安装"时调用：弹出确认对话框并异步拉取包详情（含体积等），用于展示更完整的 opkg 体验 */
+    /** 用户点击"Install"时调用：弹出确认对话框并异步拉取包详情（含体积等），用于展示更完整的 opkg 体验 */
     fun requestInstall(pkg: OpkgPackage) {
         _uiState.value = _uiState.value.copy(
             pendingInstallTarget = pkg,
@@ -166,7 +166,7 @@ class PackagesViewModel @Inject constructor(
 
     fun dismissTaskPanel() {
         _uiState.value = _uiState.value.copy(taskPanelVisible = false, taskState = OpkgTaskState.Idle)
-        // 关闭日志面板后刷新当前 tab，让操作结果反映到列表里
+        // Close日志面板后Refresh当前 tab，让操作结果反映到列表里
         when (_uiState.value.selectedTab) {
             PackagesTab.INSTALLED -> loadInstalled()
             PackagesTab.UPGRADABLE -> loadUpgradable()

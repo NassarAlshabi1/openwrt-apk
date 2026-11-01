@@ -84,7 +84,7 @@ class FirewallViewModel @Inject constructor(
         }
     }
 
-    /** 提交并应用改动（reload firewall）——危险操作，UI 需二次确认 */
+    /** 提交并Apply changes（reload firewall）——危险操作，UI 需二次确认 */
     fun applyChanges() {
         _uiState.value = _uiState.value.copy(isApplying = true)
         viewModelScope.launch {

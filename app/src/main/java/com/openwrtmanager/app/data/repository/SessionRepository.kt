@@ -16,7 +16,7 @@ sealed class LoginOutcome {
 }
 
 /**
- * 负责登录/登出，以及登录后建立的 UbusClient 与 UbusClientManager 的绑定。
+ * 负责Sign in/登出，以及Sign in后建立的 UbusClient 与 UbusClientManager 的绑定。
  */
 @Singleton
 class SessionRepository @Inject constructor(
@@ -32,13 +32,13 @@ class SessionRepository @Inject constructor(
             }
             is UbusResult.UbusError -> {
                 if (result.code == 6) {
-                    LoginOutcome.WrongCredentials("用户名或密码错误")
+                    LoginOutcome.WrongCredentials("Invalid username or password")
                 } else {
                     LoginOutcome.OtherError(result.message)
                 }
             }
             is UbusResult.NetworkError -> LoginOutcome.NetworkFailure(
-                result.throwable.message ?: "网络连接失败，请检查地址和网络"
+                result.throwable.message ?: "Network connection failed. Check the address and network."
             )
         }
     }

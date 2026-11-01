@@ -4,7 +4,7 @@ package com.openwrtmanager.app.data.model
  * UCI 配置的通用表示。一个 config（例如 "firewall"）由若干 section 组成，
  * 每个 section 有类型（".type"，如 "rule" / "zone" / "host"）和一组 key-value。
  *
- * ubus 的 uci.get 返回结构大致是：
+ * ubus 的 uci.get Back结构大致是：
  * {
  *   "values": {
  *     "cfg0a1b2c": { ".type": "zone", ".name": "cfg0a1b2c", "name": "lan", ... },

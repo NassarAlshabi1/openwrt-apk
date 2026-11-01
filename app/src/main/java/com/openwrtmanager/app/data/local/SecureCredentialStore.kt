@@ -9,8 +9,8 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 /**
- * 用 Android Keystore 加密保存每个 RouterProfile 对应的密码。
- * Key 用 profile.id，避免密码和非敏感元数据混在一起存储。
+ * 用 Android Keystore 加密保存每个 RouterProfile 对应的Password。
+ * Key 用 profile.id，避免Password和非敏感元数据混在一起存储。
  */
 @Singleton
 class SecureCredentialStore @Inject constructor(

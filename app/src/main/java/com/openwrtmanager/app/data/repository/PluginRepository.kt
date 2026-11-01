@@ -7,10 +7,10 @@ import javax.inject.Singleton
 private val LUCI_APP_PREFIX = "luci-app-"
 
 /**
- * 插件列表 = 已安装 opkg 包中，包名以 "luci-app-" 开头的那些
- * （这是 OpenWrt 生态里"有网页管理界面的插件"的事实标准命名约定）。
+ * Plugins列表 = Installed opkg 包中，Package name以 "luci-app-" 开头的那些
+ * （这是 OpenWrt 生态里"有网页管理界面的Plugins"的事实标准命名约定）。
  *
- * 不包含 luci-i18n-*（纯语言包）、luci-theme-*（主题，不算功能插件）等噪音条目。
+ * 不包含 luci-i18n-*（纯语言包）、luci-theme-*（主题，不算功能Plugins）等噪音条目。
  */
 @Singleton
 class PluginRepository @Inject constructor(

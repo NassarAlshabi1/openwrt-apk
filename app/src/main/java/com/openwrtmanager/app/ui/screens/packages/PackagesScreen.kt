@@ -54,10 +54,10 @@ fun PackagesScreen(viewModel: PackagesViewModel = hiltViewModel()) {
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
-                title = { Text("软件包管理") },
+                title = { Text("Package management") },
                 actions = {
                     IconButton(onClick = viewModel::runUpdate) {
-                        Icon(Icons.Filled.Sync, contentDescription = "更新软件源索引 (opkg update)")
+                        Icon(Icons.Filled.Sync, contentDescription = "Update package index (opkg update)")
                     }
                 }
             )
@@ -68,17 +68,17 @@ fun PackagesScreen(viewModel: PackagesViewModel = hiltViewModel()) {
                 Tab(
                     selected = uiState.selectedTab == PackagesTab.INSTALLED,
                     onClick = { viewModel.selectTab(PackagesTab.INSTALLED) },
-                    text = { Text("已安装") }
+                    text = { Text("Installed") }
                 )
                 Tab(
                     selected = uiState.selectedTab == PackagesTab.UPGRADABLE,
                     onClick = { viewModel.selectTab(PackagesTab.UPGRADABLE) },
-                    text = { Text("可更新 (${uiState.upgradable.size})") }
+                    text = { Text("Upgradable (${uiState.upgradable.size})") }
                 )
                 Tab(
                     selected = uiState.selectedTab == PackagesTab.SEARCH,
                     onClick = { viewModel.selectTab(PackagesTab.SEARCH) },
-                    text = { Text("搜索安装") }
+                    text = { Text("Search and install") }
                 )
             }
 
@@ -90,7 +90,7 @@ fun PackagesScreen(viewModel: PackagesViewModel = hiltViewModel()) {
                     onRetry = { viewModel.selectTab(PackagesTab.INSTALLED) },
                     trailingAction = { pkg ->
                         IconButton(onClick = { pendingRemove = pkg }) {
-                            Icon(Icons.Filled.Delete, contentDescription = "卸载", tint = MaterialTheme.colorScheme.error)
+                            Icon(Icons.Filled.Delete, contentDescription = "Uninstall", tint = MaterialTheme.colorScheme.error)
                         }
                     }
                 )
@@ -104,7 +104,7 @@ fun PackagesScreen(viewModel: PackagesViewModel = hiltViewModel()) {
                         ) {
                             TextButton(onClick = viewModel::upgradeAll) {
                                 Icon(Icons.Filled.Upgrade, contentDescription = null)
-                                Text(" 全部更新")
+                                Text(" Upgrade all")
                             }
                         }
                     }
@@ -115,7 +115,7 @@ fun PackagesScreen(viewModel: PackagesViewModel = hiltViewModel()) {
                         onRetry = { viewModel.selectTab(PackagesTab.UPGRADABLE) },
                         trailingAction = { pkg ->
                             IconButton(onClick = { viewModel.upgradePackage(pkg.name) }) {
-                                Icon(Icons.Filled.Upgrade, contentDescription = "更新")
+                                Icon(Icons.Filled.Upgrade, contentDescription = "Upgrade")
                             }
                         }
                     )
@@ -130,12 +130,12 @@ fun PackagesScreen(viewModel: PackagesViewModel = hiltViewModel()) {
                         OutlinedTextField(
                             value = uiState.searchQuery,
                             onValueChange = viewModel::onSearchQueryChange,
-                            label = { Text("搜索软件包") },
+                            label = { Text("Search packages") },
                             modifier = Modifier.weight(1f),
                             singleLine = true
                         )
                         IconButton(onClick = viewModel::search) {
-                            Icon(Icons.Filled.Search, contentDescription = "搜索")
+                            Icon(Icons.Filled.Search, contentDescription = "Search")
                         }
                     }
                     PackageListContent(
@@ -145,7 +145,7 @@ fun PackagesScreen(viewModel: PackagesViewModel = hiltViewModel()) {
                         onRetry = viewModel::search,
                         trailingAction = { pkg ->
                             IconButton(onClick = { viewModel.requestInstall(pkg) }) {
-                                Icon(Icons.Filled.CloudDownload, contentDescription = "安装")
+                                Icon(Icons.Filled.CloudDownload, contentDescription = "Install")
                             }
                         }
                     )
@@ -161,16 +161,16 @@ fun PackagesScreen(viewModel: PackagesViewModel = hiltViewModel()) {
         }
     }
 
-    // 安装前确认（包含从 opkg info 拉取的详情 + 空间不足警告）
+    // Installation confirmation（包含从 opkg info 拉取的详情 + 空间不足警告）
     uiState.pendingInstallTarget?.let { pkg ->
         val spaceWarning = viewModel.isPendingInstallSpaceLikelyInsufficient()
         AlertDialog(
             onDismissRequest = viewModel::cancelPendingInstall,
-            title = { Text("安装 ${pkg.name}？") },
+            title = { Text("Install ${pkg.name}？") },
             text = {
                 Column {
                     if (pkg.description.isNotBlank()) Text(pkg.description)
-                    Text("版本：${pkg.version}", style = MaterialTheme.typography.bodySmall)
+                    Text("Version: ${pkg.version}", style = MaterialTheme.typography.bodySmall)
 
                     if (uiState.isFetchingPendingInstallInfo) {
                         Row(
@@ -178,7 +178,7 @@ fun PackagesScreen(viewModel: PackagesViewModel = hiltViewModel()) {
                             verticalAlignment = androidx.compose.ui.Alignment.CenterVertically
                         ) {
                             androidx.compose.material3.CircularProgressIndicator(modifier = Modifier.size(16.dp))
-                            Text(" 正在查询包详情…", style = MaterialTheme.typography.bodySmall, modifier = Modifier.padding(start = 8.dp))
+                            Text(" Loading package details…", style = MaterialTheme.typography.bodySmall, modifier = Modifier.padding(start = 8.dp))
                         }
                     } else if (uiState.pendingInstallInfo != null) {
                         Text(
@@ -200,7 +200,7 @@ fun PackagesScreen(viewModel: PackagesViewModel = hiltViewModel()) {
                                 modifier = Modifier.padding(end = 4.dp)
                             )
                             Text(
-                                "路由器存储空间可能不足，安装可能失败",
+                                "Router storage may be insufficient; installation could fail",
                                 color = MaterialTheme.colorScheme.error,
                                 style = MaterialTheme.typography.bodySmall
                             )
@@ -209,28 +209,28 @@ fun PackagesScreen(viewModel: PackagesViewModel = hiltViewModel()) {
                 }
             },
             confirmButton = {
-                TextButton(onClick = viewModel::confirmPendingInstall) { Text("安装") }
+                TextButton(onClick = viewModel::confirmPendingInstall) { Text("Install") }
             },
             dismissButton = {
-                TextButton(onClick = viewModel::cancelPendingInstall) { Text("取消") }
+                TextButton(onClick = viewModel::cancelPendingInstall) { Text("Cancel") }
             }
         )
     }
 
-    // 卸载确认
+    // Uninstall确认
     pendingRemove?.let { pkg ->
         AlertDialog(
             onDismissRequest = { pendingRemove = null },
-            title = { Text("卸载 ${pkg.name}？") },
-            text = { Text("卸载核心系统包（如 dropbear、uhttpd）可能导致路由器无法管理，请谨慎操作。") },
+            title = { Text("Uninstall ${pkg.name}？") },
+            text = { Text("Removing core packages (such as dropbear or uhttpd) may make the router unmanageable. Proceed with caution.") },
             confirmButton = {
                 TextButton(onClick = {
                     viewModel.removePackage(pkg.name)
                     pendingRemove = null
-                }) { Text("卸载", color = MaterialTheme.colorScheme.error) }
+                }) { Text("Uninstall", color = MaterialTheme.colorScheme.error) }
             },
             dismissButton = {
-                TextButton(onClick = { pendingRemove = null }) { Text("取消") }
+                TextButton(onClick = { pendingRemove = null }) { Text("Cancel") }
             }
         )
     }
@@ -254,7 +254,7 @@ private fun PackageListContent(
             horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            Text("暂无数据", textAlign = TextAlign.Center, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Text("No data", textAlign = TextAlign.Center, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
         else -> LazyColumn(
             contentPadding = PaddingValues(bottom = 16.dp),
@@ -269,8 +269,8 @@ private fun PackageListContent(
                                 Text(pkg.description, maxLines = 2)
                             }
                             Text(
-                                if (pkg.isInstalled) "已安装版本：${pkg.installedVersion ?: pkg.version}"
-                                else "版本：${pkg.version}",
+                                if (pkg.isInstalled) "Installed version: ${pkg.installedVersion ?: pkg.version}"
+                                else "Version: ${pkg.version}",
                                 style = MaterialTheme.typography.bodySmall
                             )
                         }

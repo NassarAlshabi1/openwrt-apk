@@ -9,7 +9,7 @@ import javax.inject.Singleton
 /**
  * DHCP 管理：对应 "dhcp" 这个 UCI config。
  * type == "dhcp" 的 section 是每个接口的 DHCP 池配置；
- * type == "host" 的 section 是静态租约（MAC-IP 绑定）。
+ * type == "host" 的 section 是Static leases（MAC-IP 绑定）。
  */
 @Singleton
 class DhcpRepository @Inject constructor(

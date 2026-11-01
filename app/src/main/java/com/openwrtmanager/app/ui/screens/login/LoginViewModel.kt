@@ -67,7 +67,7 @@ class LoginViewModel @Inject constructor(
     fun login() {
         val state = _uiState.value
         if (state.baseUrl.isBlank() || state.username.isBlank()) {
-            update { it.copy(errorMessage = "请填写地址和用户名") }
+            update { it.copy(errorMessage = "Enter the router address and username") }
             return
         }
         update { it.copy(isLoading = true, errorMessage = null) }
@@ -97,7 +97,7 @@ class LoginViewModel @Inject constructor(
                     it.copy(isLoading = false, errorMessage = outcome.message)
                 }
                 is LoginOutcome.NetworkFailure -> update {
-                    it.copy(isLoading = false, errorMessage = "连接失败：${outcome.message}")
+                    it.copy(isLoading = false, errorMessage = "Connection failed: ${outcome.message}")
                 }
                 is LoginOutcome.OtherError -> update {
                     it.copy(isLoading = false, errorMessage = outcome.message)

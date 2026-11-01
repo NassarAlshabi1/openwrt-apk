@@ -18,7 +18,7 @@ private val Context.dataStore by preferencesDataStore(name = "router_profiles")
 private val PROFILES_KEY = stringPreferencesKey("profiles_json")
 
 /**
- * 保存"多个路由器连接配置"的列表（不含密码，密码在 SecureCredentialStore）。
+ * 保存"多个路由器连接配置"的列表（不含Password，Password在 SecureCredentialStore）。
  * 用一个 JSON 数组整体存取，profile 数量不会很大（用户不会加几百台路由器），
  * 没必要上 Room。
  */

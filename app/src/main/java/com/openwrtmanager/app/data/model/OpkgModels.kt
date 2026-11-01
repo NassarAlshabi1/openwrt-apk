@@ -3,7 +3,7 @@ package com.openwrtmanager.app.data.model
 data class OpkgPackage(
     val name: String,
     val version: String,
-    val installedVersion: String? = null,   // 非空表示已安装，且可能与 version（可更新版本）不同
+    val installedVersion: String? = null,   // 非空表示Installed，且可能与 version（UpgradableVersion）不同
     val description: String = "",
     val sizeBytes: Long = 0L,
     val architecture: String = "",

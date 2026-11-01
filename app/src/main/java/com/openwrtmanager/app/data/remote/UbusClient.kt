@@ -55,7 +55,7 @@ class UbusClient(
     val isLoggedIn: Boolean
         get() = sessionId != EMPTY_SESSION
 
-    /** 登录，成功后内部保存 session，供后续 call() 自动使用 */
+    /** Sign in，成功后内部保存 session，供后续 call() 自动使用 */
     suspend fun login(user: String, pass: String): UbusResult {
         val result = rawCall(
             session = EMPTY_SESSION,
@@ -85,7 +85,7 @@ class UbusClient(
 
     /**
      * 通用调用入口。所有业务 Repository 都通过这个方法与路由器交互。
-     * 如果遇到 PERMISSION_DENIED（session 过期），会自动尝试用保存的凭据重新登录一次并重试。
+     * 如果遇到 PERMISSION_DENIED（session 过期），会自动尝试用保存的凭据重新Sign in一次并Retry。
      */
     suspend fun call(
         obj: String,

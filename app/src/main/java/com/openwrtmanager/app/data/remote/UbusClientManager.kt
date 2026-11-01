@@ -30,7 +30,7 @@ class UbusClientManager @Inject constructor() {
         _activeProfileId.value = null
     }
 
-    /** 抛异常而不是返回 null，方便 Repository 里用 requireClient() 简化空检查 */
+    /** 抛异常而不是Back null，方便 Repository 里用 requireClient() 简化空检查 */
     fun requireClient(): UbusClient =
         _activeClient.value ?: error("No active router connection. User must log in first.")
 }

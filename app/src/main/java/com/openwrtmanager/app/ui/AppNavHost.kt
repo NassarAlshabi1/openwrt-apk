@@ -62,7 +62,7 @@ fun AppNavHost(
 
         composable(Routes.PLUGINS) {
             // 共享 PluginsViewModel 实例（用同一个 nav graph entry 的 viewModel），
-            // 这样点击列表项跳转到详情页时可以直接按包名从已加载的列表里查找，
+            // 这样点击列表项跳转到详情页时可以直接按Package name从已加载的列表里查找，
             // 不需要重复请求或做复杂的参数序列化。
             val pluginsViewModel: PluginsViewModel = hiltViewModel()
             MainScaffold(navController) {
@@ -83,7 +83,7 @@ fun AppNavHost(
             val encodedName = backStackEntry.arguments?.getString("packageName") ?: ""
             val packageName = URLDecoder.decode(encodedName, "UTF-8")
 
-            // 从当前活跃连接的 baseUrl 拼跳转链接；从共享的 PluginsViewModel 状态里按包名查找详情。
+            // 从当前活跃连接的 baseUrl 拼跳转链接；从共享的 PluginsViewModel 状态里按Package name查找详情。
             val parentEntry = remember(backStackEntry) {
                 navController.getBackStackEntry(Routes.PLUGINS)
             }

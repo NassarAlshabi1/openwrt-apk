@@ -9,7 +9,7 @@ data class SystemStatus(
     val loadAverage: List<Double>,   // 1/5/15 分钟负载
     val memoryTotalKb: Long,
     val memoryFreeKb: Long,
-    val rootfsTotalKb: Long,         // 用于 opkg 安装前的空间检查
+    val rootfsTotalKb: Long,         // 用于 opkg Install前的空间检查
     val rootfsFreeKb: Long
 ) {
     val memoryUsedPercent: Int

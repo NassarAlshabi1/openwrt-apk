@@ -26,12 +26,12 @@ import androidx.compose.ui.unit.dp
 import com.openwrtmanager.app.data.model.InstalledPlugin
 
 /**
- * 插件详情页 —— 当前版本是"通用兜底页面"。
+ * Plugins详情页 —— 当前Version是"通用兜底页面"。
  *
- * 扩展点说明（后续如何为具体插件适配专属 UI）：
+ * 扩展点说明（后续如何为具体Plugins适配专属 UI）：
  * 在 PluginDetailRoute 里维护一个 `packageName -> @Composable 专属页面` 的映射表
- * （类似一个小型 registry），匹配到已知插件（如 luci-app-adguardhome）时跳转到专属页面，
- * 匹配不到时走这个通用兜底页面。这样新增一个插件适配不需要改动列表/路由逻辑，
+ * （类似一个小型 registry），匹配到已知Plugins（如 luci-app-adguardhome）时跳转到专属页面，
+ * 匹配不到时走这个通用兜底页面。这样Add一个Plugins适配不需要改动列表/路由逻辑，
  * 只需要在 registry 里加一条映射 + 实现对应 Composable。
  */
 @OptIn(ExperimentalMaterial3Api::class)
@@ -49,7 +49,7 @@ fun PluginDetailScreen(
                 title = { Text(plugin.packageName) },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "返回")
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
                     }
                 }
             )
@@ -72,11 +72,11 @@ fun PluginDetailScreen(
 
             Card(modifier = Modifier.fillMaxWidth()) {
                 Column(modifier = Modifier.padding(16.dp)) {
-                    Text("包名", style = MaterialTheme.typography.labelMedium)
+                    Text("Package name", style = MaterialTheme.typography.labelMedium)
                     Text(plugin.packageName, style = MaterialTheme.typography.bodyLarge)
 
                     Text(
-                        "版本",
+                        "Version",
                         style = MaterialTheme.typography.labelMedium,
                         modifier = Modifier.padding(top = 12.dp)
                     )
@@ -84,7 +84,7 @@ fun PluginDetailScreen(
 
                     if (plugin.description.isNotBlank()) {
                         Text(
-                            "描述",
+                            "Description",
                             style = MaterialTheme.typography.labelMedium,
                             modifier = Modifier.padding(top = 12.dp)
                         )
@@ -94,7 +94,7 @@ fun PluginDetailScreen(
             }
 
             Text(
-                "这个插件暂未提供专属管理界面。你可以在浏览器中打开该插件在 LuCI 网页版的管理页面。",
+                "This plugin does not have a dedicated management screen yet. Open its LuCI web interface in a browser.",
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.padding(vertical = 16.dp),
@@ -108,7 +108,7 @@ fun PluginDetailScreen(
                     context.startActivity(intent)
                 }) {
                     Icon(Icons.Filled.OpenInBrowser, contentDescription = null)
-                    Text(" 在浏览器中打开")
+                    Text(" Open in browser")
                 }
             }
         }

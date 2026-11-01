@@ -55,15 +55,15 @@ fun FirewallScreen(viewModel: FirewallViewModel = hiltViewModel()) {
 
     LaunchedEffect(uiState.hasPendingChanges) {
         if (uiState.hasPendingChanges) {
-            snackbarHostState.showSnackbar("有未生效的改动", withDismissAction = false)
+            snackbarHostState.showSnackbar("Unsaved changes", withDismissAction = false)
         }
     }
 
     Scaffold(
-        topBar = { CenterAlignedTopAppBar(title = { Text("防火墙") }) },
+        topBar = { CenterAlignedTopAppBar(title = { Text("Firewall") }) },
         floatingActionButton = {
             FloatingActionButton(onClick = { showAddDialog = true }) {
-                Icon(Icons.Filled.Add, contentDescription = "新增规则")
+                Icon(Icons.Filled.Add, contentDescription = "Add rule")
             }
         },
         snackbarHost = { SnackbarHost(snackbarHostState) }
@@ -71,7 +71,7 @@ fun FirewallScreen(viewModel: FirewallViewModel = hiltViewModel()) {
         Column(modifier = Modifier.padding(padding)) {
             when {
                 uiState.isLoading -> FullScreenLoading()
-                uiState.errorMessage != null -> FullScreenError(uiState.errorMessage ?: "加载失败", onRetry = viewModel::refresh)
+                uiState.errorMessage != null -> FullScreenError(uiState.errorMessage ?: "Loading failed", onRetry = viewModel::refresh)
                 else -> {
                     if (uiState.hasPendingChanges) {
                         PendingChangesBar(
@@ -83,7 +83,7 @@ fun FirewallScreen(viewModel: FirewallViewModel = hiltViewModel()) {
                     LazyColumn(contentPadding = PaddingValues(bottom = 80.dp)) {
                         item {
                             Text(
-                                "区域 (${uiState.zones.size})",
+                                "Zones (${uiState.zones.size})",
                                 style = MaterialTheme.typography.titleSmall,
                                 modifier = Modifier.padding(16.dp)
                             )
@@ -93,7 +93,7 @@ fun FirewallScreen(viewModel: FirewallViewModel = hiltViewModel()) {
                         }
                         item {
                             Text(
-                                "规则 (${uiState.rules.size})",
+                                "Rules (${uiState.rules.size})",
                                 style = MaterialTheme.typography.titleSmall,
                                 modifier = Modifier.padding(16.dp)
                             )
@@ -124,16 +124,16 @@ fun FirewallScreen(viewModel: FirewallViewModel = hiltViewModel()) {
     pendingDelete?.let { rule ->
         AlertDialog(
             onDismissRequest = { pendingDelete = null },
-            title = { Text("删除规则 “${rule.name}”？") },
-            text = { Text("删除后需要点击“应用改动”才会真正生效。") },
+            title = { Text("Delete rule “${rule.name}”？") },
+            text = { Text("Click “Apply changes” after deletion for it to take effect.") },
             confirmButton = {
                 TextButton(onClick = {
                     viewModel.deleteRule(rule)
                     pendingDelete = null
-                }) { Text("删除", color = MaterialTheme.colorScheme.error) }
+                }) { Text("Delete", color = MaterialTheme.colorScheme.error) }
             },
             dismissButton = {
-                TextButton(onClick = { pendingDelete = null }) { Text("取消") }
+                TextButton(onClick = { pendingDelete = null }) { Text("Cancel") }
             }
         )
     }
@@ -152,10 +152,10 @@ private fun PendingChangesBar(isApplying: Boolean, onApply: () -> Unit, onDiscar
                 .padding(12.dp),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Text("有未生效的改动", modifier = Modifier.padding(top = 8.dp))
+            Text("Unsaved changes", modifier = Modifier.padding(top = 8.dp))
             Row {
-                TextButton(onClick = onDiscard, enabled = !isApplying) { Text("放弃") }
-                TextButton(onClick = onApply, enabled = !isApplying) { Text("应用改动") }
+                TextButton(onClick = onDiscard, enabled = !isApplying) { Text("Discard") }
+                TextButton(onClick = onApply, enabled = !isApplying) { Text("Apply changes") }
             }
         }
     }
@@ -166,7 +166,7 @@ private fun ZoneItem(zone: FirewallZone) {
     ListItem(
         headlineContent = { Text(zone.name) },
         supportingContent = {
-            Text("入站: ${zone.input} · 出站: ${zone.output} · 转发: ${zone.forward}" + if (zone.masq) " · NAT" else "")
+            Text("Input: ${zone.input} · Output: ${zone.output} · Forward: ${zone.forward}" + if (zone.masq) " · NAT" else "")
         }
     )
 }
@@ -191,7 +191,7 @@ private fun RuleItem(rule: FirewallRule, onToggle: () -> Unit, onDelete: () -> U
             Row {
                 Switch(checked = rule.enabled, onCheckedChange = { onToggle() })
                 IconButton(onClick = onDelete) {
-                    Icon(Icons.Filled.Delete, contentDescription = "删除", tint = MaterialTheme.colorScheme.error)
+                    Icon(Icons.Filled.Delete, contentDescription = "Delete", tint = MaterialTheme.colorScheme.error)
                 }
             }
         }
@@ -213,22 +213,22 @@ private fun AddRuleDialog(
 
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("新增防火墙规则") },
+        title = { Text("Add firewall rule") },
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                OutlinedTextField(value = name, onValueChange = { name = it }, label = { Text("规则名称") }, singleLine = true)
-                OutlinedTextField(value = src, onValueChange = { src = it }, label = { Text("源区域 (如 wan)") }, singleLine = true)
-                OutlinedTextField(value = dest, onValueChange = { dest = it }, label = { Text("目的区域 (如 lan)") }, singleLine = true)
-                OutlinedTextField(value = port, onValueChange = { port = it }, label = { Text("目的端口 (可选)") }, singleLine = true)
-                OutlinedTextField(value = proto, onValueChange = { proto = it }, label = { Text("协议 (tcp/udp)") }, singleLine = true)
-                OutlinedTextField(value = target, onValueChange = { target = it }, label = { Text("动作 (ACCEPT/REJECT/DROP)") }, singleLine = true)
+                OutlinedTextField(value = name, onValueChange = { name = it }, label = { Text("Rule name") }, singleLine = true)
+                OutlinedTextField(value = src, onValueChange = { src = it }, label = { Text("Source zone (e.g. wan)") }, singleLine = true)
+                OutlinedTextField(value = dest, onValueChange = { dest = it }, label = { Text("Destination zone (e.g. lan)") }, singleLine = true)
+                OutlinedTextField(value = port, onValueChange = { port = it }, label = { Text("Destination port (optional)") }, singleLine = true)
+                OutlinedTextField(value = proto, onValueChange = { proto = it }, label = { Text("Protocol (tcp/udp)") }, singleLine = true)
+                OutlinedTextField(value = target, onValueChange = { target = it }, label = { Text("Action (ACCEPT/REJECT/DROP)") }, singleLine = true)
             }
         },
         confirmButton = {
             TextButton(
                 onClick = {
                     onConfirm(
-                        name.ifBlank { "新规则" },
+                        name.ifBlank { "新Rules" },
                         src.ifBlank { null },
                         dest.ifBlank { null },
                         port.ifBlank { null },
@@ -237,10 +237,10 @@ private fun AddRuleDialog(
                     )
                 },
                 enabled = name.isNotBlank()
-            ) { Text("添加") }
+            ) { Text("Add") }
         },
         dismissButton = {
-            TextButton(onClick = onDismiss) { Text("取消") }
+            TextButton(onClick = onDismiss) { Text("Cancel") }
         }
     )
 }
