@@ -71,7 +71,7 @@ jobs:
           size_mb=$(awk "BEGIN { printf \"%.2f\", $size_bytes / 1048576 }")
           {
             echo "## APK size"
-            echo "- File: \\`$(basename \"$apk\")\\`"
+            echo "- File: $(basename \"$apk\")"
             echo "- Size: ${size_mb} MiB (${size_bytes} bytes)"
           } >> "$GITHUB_STEP_SUMMARY"
 
