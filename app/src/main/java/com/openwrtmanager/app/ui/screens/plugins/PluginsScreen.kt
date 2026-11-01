@@ -56,7 +56,7 @@ fun PluginsScreen(
                     tint = MaterialTheme.colorScheme.onSurfaceVariant
                 )
                 Text(
-                    "No installed plugins found\n(packages whose names start with luci-app-)",
+                    AppStrings.text("No installed plugins found\n(packages whose names start with luci-app-)"),
                     textAlign = androidx.compose.ui.text.style.TextAlign.Center,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.padding(top = 8.dp)
@@ -73,7 +73,7 @@ fun PluginsScreen(
                         headlineContent = { Text(plugin.packageName) },
                         supportingContent = {
                             Text(
-                                plugin.description.ifBlank { "Version ${plugin.version}" },
+                                AppStrings.text(plugin.description.ifBlank { "Version ${plugin.version}" }),
                                 maxLines = 2
                             )
                         },

@@ -74,7 +74,7 @@ fun OpkgTaskPanel(
                     is OpkgTaskState.Failed -> {
                         Icon(Icons.Filled.Error, contentDescription = null, tint = MaterialTheme.colorScheme.error)
                         Text(
-                            " Operation failed",
+                            AppStrings.text(" Operation failed"),
                             style = MaterialTheme.typography.titleMedium,
                             modifier = Modifier.padding(start = 4.dp)
                         )

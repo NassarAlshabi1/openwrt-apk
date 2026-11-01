@@ -70,7 +70,7 @@ fun DhcpScreen(viewModel: DhcpViewModel = hiltViewModel()) {
                     LazyColumn(contentPadding = PaddingValues(bottom = 80.dp)) {
                         item {
                             Text(
-                                "DHCP 池 (${uiState.pools.size})",
+                                AppStrings.text("DHCP pools (${uiState.pools.size})"),
                                 style = MaterialTheme.typography.titleSmall,
                                 modifier = Modifier.padding(16.dp)
                             )
@@ -80,7 +80,7 @@ fun DhcpScreen(viewModel: DhcpViewModel = hiltViewModel()) {
                         }
                         item {
                             Text(
-                                "Static leases (${uiState.staticLeases.size})",
+                                AppStrings.text("Static leases (${uiState.staticLeases.size})"),
                                 style = MaterialTheme.typography.titleSmall,
                                 modifier = Modifier.padding(16.dp)
                             )
@@ -149,7 +149,7 @@ private fun PoolItem(pool: DhcpPool, onToggleIgnored: () -> Unit) {
     ListItem(
         headlineContent = { Text(pool.interfaceName) },
         supportingContent = {
-            Text("Start: ${pool.start ?: "-"} · Count: ${pool.limit ?: "-"} · Lease: ${pool.leaseTime ?: AppStrings.text("Default")}")
+            Text(AppStrings.text("Start: ${pool.start ?: "-"} · Count: ${pool.limit ?: "-"} · Lease: ${pool.leaseTime ?: AppStrings.text("Default")}"))
         },
         trailingContent = {
             Row(verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {

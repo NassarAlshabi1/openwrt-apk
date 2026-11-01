@@ -84,7 +84,7 @@ fun FirewallScreen(viewModel: FirewallViewModel = hiltViewModel()) {
                     LazyColumn(contentPadding = PaddingValues(bottom = 80.dp)) {
                         item {
                             Text(
-                                "Zones (${uiState.zones.size})",
+                                AppStrings.text("Zones (${uiState.zones.size})"),
                                 style = MaterialTheme.typography.titleSmall,
                                 modifier = Modifier.padding(16.dp)
                             )
@@ -94,7 +94,7 @@ fun FirewallScreen(viewModel: FirewallViewModel = hiltViewModel()) {
                         }
                         item {
                             Text(
-                                "Rules (${uiState.rules.size})",
+                                AppStrings.text("Rules (${uiState.rules.size})"),
                                 style = MaterialTheme.typography.titleSmall,
                                 modifier = Modifier.padding(16.dp)
                             )

@@ -78,6 +78,18 @@ object AppStrings {
         "Description" to "الوصف",
         "Back" to "رجوع",
         "Open in browser" to "فتح في المتصفح",
+        " Open in browser" to " فتح في المتصفح",
+        "Zones" to "المناطق",
+        "Rules" to "القواعد",
+        "DHCP pools" to "مجموعات DHCP",
+        "Static leases" to "الحجوزات الثابتة",
+        "Dangerous operation; the network will be briefly interrupted" to "إجراء خطير؛ سينقطع الاتصال بالشبكة مؤقتًا",
+        "This plugin does not have a dedicated management screen yet. Open its LuCI web interface in a browser." to "لا تملك هذه الإضافة شاشة إدارة مخصصة بعد. افتح واجهة LuCI الخاصة بها في المتصفح.",
+        "Operation failed" to "فشلت العملية",
+        " Operation failed" to " فشلت العملية",
+        "No installed plugins found\n(packages whose names start with luci-app-)" to "لا توجد إضافات مثبّتة\n(الحزم التي تبدأ أسماؤها بـ luci-app-)",
+        " Upgrade all" to " تحديث الكل",
+        " Loading package details…" to " جارٍ تحميل تفاصيل الحزمة…",
         "Plugins" to "الإضافات",
         "DHCP" to "DHCP",
         "Loading failed" to "فشل التحميل"
@@ -98,9 +110,18 @@ object AppStrings {
             value.startsWith("Install ") -> "تثبيت ${value.removePrefix("Install ").removeSuffix("？")}؟"
             value.startsWith("Uninstall ") -> "إلغاء تثبيت ${value.removePrefix("Uninstall ").removeSuffix("？")}؟"
             value.startsWith("Version: ") -> "الإصدار: ${value.removePrefix("Version: ")}"
+            value.startsWith("Version ") -> "الإصدار ${value.removePrefix("Version ")}"
             value.startsWith("Upgradable (") -> "قابلة للتحديث ${value.substringAfter("(").let { "($it" }}"
+            value.startsWith("DHCP pools (") -> "مجموعات DHCP ${value.substringAfter("(").let { "($it" }}"
+            value.startsWith("Static leases (") -> "الحجوزات الثابتة ${value.substringAfter("(").let { "($it" }}"
+            value.startsWith("Zones (") -> "المناطق ${value.substringAfter("(").let { "($it" }}"
+            value.startsWith("Rules (") -> "القواعد ${value.substringAfter("(").let { "($it" }}"
+            value.startsWith("Start: ") -> value.replace("Start:", "البداية:").replace("Count:", "العدد:").replace("Lease:", "مدة الحجز:")
+            value.contains("% used · remaining") -> value.replace("% used · remaining", "% مستخدم · المتبقي")
             value.startsWith("Connection failed: ") -> "فشل الاتصال: ${value.removePrefix("Connection failed: ")}"
             value.startsWith("Input: ") -> value.replace("Input:", "الدخول:").replace("Output:", "الخروج:").replace("Forward:", "التمرير:").replace(" · NAT", " · NAT")
+            value.startsWith("Uptime: ") -> "مدة التشغيل: ${value.removePrefix("Uptime: ")}"
+            value.startsWith("Removing core packages") -> "إزالة الحزم الأساسية (مثل dropbear أو uhttpd) قد تجعل الموجّه غير قابل للإدارة. تابع بحذر."
             else -> value
         }
     }

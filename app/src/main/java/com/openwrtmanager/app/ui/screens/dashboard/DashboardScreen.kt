@@ -118,7 +118,7 @@ private fun DashboardContent(status: SystemStatus, onRebootClick: () -> Unit) {
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                     Text(
-                        "Uptime: ${formatUptime(status.uptimeSeconds)}",
+                        AppStrings.text("Uptime: ${formatUptime(status.uptimeSeconds)}"),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -149,7 +149,7 @@ private fun DashboardContent(status: SystemStatus, onRebootClick: () -> Unit) {
                             .padding(vertical = 8.dp)
                     )
                     Text(
-                        "${status.memoryUsedPercent}% used · remaining ${status.memoryFreeKb / 1024} MB",
+                            AppStrings.text("${status.memoryUsedPercent}% used · remaining ${status.memoryFreeKb / 1024} MB"),
                         style = MaterialTheme.typography.bodySmall
                     )
                 }
@@ -168,7 +168,7 @@ private fun DashboardContent(status: SystemStatus, onRebootClick: () -> Unit) {
                                 .padding(vertical = 8.dp)
                         )
                         Text(
-                            "${status.rootfsUsedPercent}% used · remaining ${status.rootfsFreeKb / 1024} MB",
+                            AppStrings.text("${status.rootfsUsedPercent}% used · remaining ${status.rootfsFreeKb / 1024} MB"),
                             style = MaterialTheme.typography.bodySmall
                         )
                     }
@@ -187,7 +187,7 @@ private fun DashboardContent(status: SystemStatus, onRebootClick: () -> Unit) {
                     Column {
                         Text(AppStrings.text("Restart router"), style = MaterialTheme.typography.titleSmall)
                         Text(
-                            "Dangerous operation; the network will be briefly interrupted",
+                            AppStrings.text("Dangerous operation; the network will be briefly interrupted"),
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
@@ -209,8 +209,15 @@ private fun formatUptime(seconds: Long): String {
     val days = TimeUnit.SECONDS.toDays(seconds)
     val hours = TimeUnit.SECONDS.toHours(seconds) % 24
     val minutes = TimeUnit.SECONDS.toMinutes(seconds) % 60
-    return buildString {
-        if (days > 0) append("${days}天 ")
-        append("${hours}小时 ${minutes}分钟")
+    return if (LanguageManager.isArabic()) {
+        buildString {
+            if (days > 0) append("${days} يوم ")
+            append("${hours} ساعة ${minutes} دقيقة")
+        }
+    } else {
+        buildString {
+            if (days > 0) append("${days} days ")
+            append("${hours} hours ${minutes} minutes")
+        }
     }
 }

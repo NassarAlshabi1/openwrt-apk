@@ -95,7 +95,7 @@ fun PluginDetailScreen(
             }
 
             Text(
-                "This plugin does not have a dedicated management screen yet. Open its LuCI web interface in a browser.",
+                AppStrings.text("This plugin does not have a dedicated management screen yet. Open its LuCI web interface in a browser."),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.padding(vertical = 16.dp),
@@ -109,7 +109,7 @@ fun PluginDetailScreen(
                     context.startActivity(intent)
                 }) {
                     Icon(Icons.Filled.OpenInBrowser, contentDescription = null)
-                    Text(" Open in browser")
+                    Text(AppStrings.text(" Open in browser"))
                 }
             }
         }
