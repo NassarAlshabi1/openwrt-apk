@@ -122,8 +122,7 @@ class NetworkModeRepository @Inject constructor(
             backup=${shellQuote(backup)}
             mkdir -p "$backup"
             cp -f /etc/config/network /etc/config/wireless "$backup/"
-            opkg update
-            opkg install $packages
+            ${if (c.installPackages) "opkg update\n            opkg install $packages" else "# Package installation skipped by the user"}
             $uci
             uci commit wireless
             uci commit network

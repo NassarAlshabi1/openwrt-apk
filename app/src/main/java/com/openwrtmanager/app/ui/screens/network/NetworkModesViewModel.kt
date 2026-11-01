@@ -14,6 +14,7 @@ import javax.inject.Inject
 
 data class NetworkModesUiState(
     val mode: NetworkMode = NetworkMode.WDS_BRIDGE,
+    val installPackages: Boolean = false,
     val upstreamSsid: String = "",
     val upstreamPassword: String = "",
     val localSsid: String = "",
@@ -49,6 +50,7 @@ class NetworkModesViewModel @Inject constructor(
             repository.apply(
                 NetworkModeConfig(
                     mode = s.mode,
+                    installPackages = s.installPackages,
                     upstreamSsid = s.upstreamSsid,
                     upstreamPassword = s.upstreamPassword,
                     localSsid = s.localSsid,

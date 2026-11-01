@@ -8,6 +8,7 @@ enum class NetworkMode {
 
 data class NetworkModeConfig(
     val mode: NetworkMode,
+    val installPackages: Boolean = false,
     val upstreamSsid: String = "",
     val upstreamPassword: String = "",
     val localSsid: String = "",

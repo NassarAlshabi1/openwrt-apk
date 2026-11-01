@@ -42,8 +42,10 @@
 - **DHCP**：DHCP 池启停、静态租约(MAC-IP 绑定)增删。
 - **Network modes**: a guided setup for fixed-router WDS Bridge, multi-node
   802.11s Mesh, and Repeater/RelayD. The wizard installs the required LuCI/
-  OpenWrt packages, backs up `/etc/config/network` and `/etc/config/wireless`,
-  then applies and reloads the UCI configuration after explicit confirmation.
+  OpenWrt packages when requested, backs up `/etc/config/network` and
+  `/etc/config/wireless`, then applies and reloads the UCI configuration after
+  explicit confirmation. Package installation is optional; disable it when the
+  required packages are already installed or when you want configuration only.
 
 ### Network mode package presets
 

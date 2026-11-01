@@ -18,6 +18,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.Switch
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -54,6 +55,23 @@ fun NetworkModesScreen(viewModel: NetworkModesViewModel = hiltViewModel()) {
             }
             Text(modeDescription(state.mode), style = MaterialTheme.typography.bodyMedium)
 
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(AppStrings.text("Install required packages"), style = MaterialTheme.typography.titleSmall)
+                    Text(
+                        AppStrings.text("Optional: install the LuCI/OpenWrt packages for this mode before applying configuration."),
+                        style = MaterialTheme.typography.bodySmall
+                    )
+                }
+                Switch(
+                    checked = state.installPackages,
+                    onCheckedChange = { enabled -> viewModel.update { copy(installPackages = enabled) } }
+                )
+            }
+
             when (state.mode) {
                 NetworkMode.WDS_BRIDGE -> {
                     Field("Upstream SSID", state.upstreamSsid) { viewModel.update { copy(upstreamSsid = it) } }
@@ -80,7 +98,7 @@ fun NetworkModesScreen(viewModel: NetworkModesViewModel = hiltViewModel()) {
                 modifier = Modifier.fillMaxWidth()
             ) {
                 if (state.running) CircularProgressIndicator(modifier = Modifier.padding(end = 8.dp))
-                Text(AppStrings.text("Install packages and apply network mode"))
+                Text(AppStrings.text("Apply network mode"))
             }
             state.resultMessage?.let {
                 Card { Text(it, modifier = Modifier.padding(12.dp)) }
@@ -95,7 +113,7 @@ fun NetworkModesScreen(viewModel: NetworkModesViewModel = hiltViewModel()) {
         AlertDialog(
             onDismissRequest = viewModel::cancelApply,
             title = { Text(AppStrings.text("Apply network mode?")) },
-            text = { Text(AppStrings.text("This backs up /etc/config/network and wireless, installs the required packages, and reloads Wi-Fi/network. The active connection may be lost.")) },
+            text = { Text(AppStrings.text(if (state.installPackages) "This backs up /etc/config/network and wireless, installs the selected packages, and reloads Wi-Fi/network. The active connection may be lost." else "This backs up /etc/config/network and wireless, applies UCI configuration without installing packages, and reloads Wi-Fi/network. The active connection may be lost.")) },
             confirmButton = { TextButton(onClick = viewModel::confirmApply) { Text(AppStrings.text("Apply"), color = MaterialTheme.colorScheme.error) } },
             dismissButton = { TextButton(onClick = viewModel::cancelApply) { Text(AppStrings.text("Cancel")) } }
         )
