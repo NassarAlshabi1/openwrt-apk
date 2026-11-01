@@ -28,6 +28,13 @@
   如果你自定义了更严格的 ACL、锁死了普通用户权限，opkg 相关功期会请求失败并给出错误提示，
   此时需要到 `/usr/share/rpcd/acl.d/` 下调整该账户的权限组。
 
+If the app shows `ubus error 6: Permission denied` while opening Packages, the
+login succeeded but the LuCI user is not allowed to call `file.exec`. Sign in
+with the router's `root` account, or assign the user an administrative ACL
+group that includes `file.exec` (normally provided by `luci-mod-admin-full`).
+The app reports this cause explicitly instead of showing only the numeric ubus
+error.
+
 ## 已实现功能
 
 - **登录**：输入路由器地址 + 用户名密码，本地加密保存（Android Keystore），支持保存多个路由器。

@@ -113,7 +113,19 @@ class OpkgRepository @Inject constructor(
                     Result.success(stdout)
                 }
             }
-            is UbusResult.UbusError -> Result.failure(IllegalStateException("ubus error ${result.code}: ${result.message}"))
+            is UbusResult.UbusError -> {
+                if (result.code == com.openwrtmanager.app.data.remote.UbusErrorCode.PERMISSION_DENIED) {
+                    Result.failure(
+                        IllegalStateException(
+                            "Permission denied by OpenWrt ACL for file.exec. " +
+                                "Use the root LuCI account or grant this user file.exec permission " +
+                                "in /usr/share/rpcd/acl.d/. Package management cannot run without it."
+                        )
+                    )
+                } else {
+                    Result.failure(IllegalStateException("ubus error ${result.code}: ${result.message}"))
+                }
+            }
             is UbusResult.NetworkError -> Result.failure(result.throwable)
         }
     }
