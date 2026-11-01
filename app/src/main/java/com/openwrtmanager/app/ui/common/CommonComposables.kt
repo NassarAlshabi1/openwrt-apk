@@ -1,4 +1,5 @@
 package com.openwrtmanager.app.ui.common
+import com.openwrtmanager.app.ui.common.AppStrings
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -51,7 +52,7 @@ fun FullScreenError(message: String, onRetry: (() -> Unit)? = null) {
         if (onRetry != null) {
             androidx.compose.foundation.layout.Spacer(Modifier.padding(8.dp))
             Button(onClick = onRetry) {
-                Text("Retry")
+                Text(AppStrings.text("Retry"))
             }
         }
     }

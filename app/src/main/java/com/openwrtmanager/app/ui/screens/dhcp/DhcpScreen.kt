@@ -1,4 +1,5 @@
 package com.openwrtmanager.app.ui.screens.dhcp
+import com.openwrtmanager.app.ui.common.AppStrings
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -47,17 +48,17 @@ fun DhcpScreen(viewModel: DhcpViewModel = hiltViewModel()) {
     var pendingDelete by remember { mutableStateOf<StaticLease?>(null) }
 
     Scaffold(
-        topBar = { CenterAlignedTopAppBar(title = { Text("DHCP") }) },
+        topBar = { CenterAlignedTopAppBar(title = { Text(AppStrings.text("DHCP")) }) },
         floatingActionButton = {
             FloatingActionButton(onClick = { showAddLeaseDialog = true }) {
-                Icon(Icons.Filled.Add, contentDescription = "Add static lease")
+                Icon(Icons.Filled.Add, contentDescription = AppStrings.text("Add static lease"))
             }
         }
     ) { padding ->
         Column(modifier = Modifier.padding(padding)) {
             when {
                 uiState.isLoading -> FullScreenLoading()
-                uiState.errorMessage != null -> FullScreenError(uiState.errorMessage ?: "Loading failed", onRetry = viewModel::refresh)
+                uiState.errorMessage != null -> FullScreenError(uiState.errorMessage ?: AppStrings.text("Loading failed"), onRetry = viewModel::refresh)
                 else -> {
                     if (uiState.hasPendingChanges) {
                         PendingChangesBar(
@@ -106,17 +107,17 @@ fun DhcpScreen(viewModel: DhcpViewModel = hiltViewModel()) {
     pendingDelete?.let { lease ->
         AlertDialog(
             onDismissRequest = { pendingDelete = null },
-            title = { Text("Delete static lease “${lease.name}”？") },
+            title = { Text(AppStrings.text("Delete static lease “${lease.name}”？")) },
             confirmButton = {
                 TextButton(onClick = {
                     viewModel.deleteStaticLease(lease)
                     pendingDelete = null
-                }) { Text("Delete", color = MaterialTheme.colorScheme.error) }
+                }) { Text(AppStrings.text("Delete"), color = MaterialTheme.colorScheme.error) }
             },
             dismissButton = {
-                TextButton(onClick = { pendingDelete = null }) { Text("Cancel") }
+                TextButton(onClick = { pendingDelete = null }) { Text(AppStrings.text("Cancel")) }
             },
-            text = { Text("Click “Apply changes” after deletion for it to take effect.") }
+            text = { Text(AppStrings.text("Click “Apply changes” after deletion for it to take effect.")) }
         )
     }
 }
@@ -134,10 +135,10 @@ private fun PendingChangesBar(isApplying: Boolean, onApply: () -> Unit, onDiscar
                 .padding(12.dp),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Text("Unsaved changes", modifier = Modifier.padding(top = 8.dp))
+            Text(AppStrings.text("Unsaved changes"), modifier = Modifier.padding(top = 8.dp))
             Row {
-                TextButton(onClick = onDiscard, enabled = !isApplying) { Text("Discard") }
-                TextButton(onClick = onApply, enabled = !isApplying) { Text("Apply changes") }
+                TextButton(onClick = onDiscard, enabled = !isApplying) { Text(AppStrings.text("Discard")) }
+                TextButton(onClick = onApply, enabled = !isApplying) { Text(AppStrings.text("Apply changes")) }
             }
         }
     }
@@ -148,11 +149,11 @@ private fun PoolItem(pool: DhcpPool, onToggleIgnored: () -> Unit) {
     ListItem(
         headlineContent = { Text(pool.interfaceName) },
         supportingContent = {
-            Text("Start: ${pool.start ?: "-"} · Count: ${pool.limit ?: "-"} · Lease: ${pool.leaseTime ?: "Default"}")
+            Text("Start: ${pool.start ?: "-"} · Count: ${pool.limit ?: "-"} · Lease: ${pool.leaseTime ?: AppStrings.text("Default")}")
         },
         trailingContent = {
             Row(verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
-                Text("Enable DHCP", style = MaterialTheme.typography.bodySmall)
+                Text(AppStrings.text("Enable DHCP"), style = MaterialTheme.typography.bodySmall)
                 Switch(checked = !pool.ignore, onCheckedChange = { onToggleIgnored() })
             }
         }
@@ -166,7 +167,7 @@ private fun LeaseItem(lease: StaticLease, onDelete: () -> Unit) {
         supportingContent = { Text("${lease.macAddress} → ${lease.ipAddress}") },
         trailingContent = {
             IconButton(onClick = onDelete) {
-                Icon(Icons.Filled.Delete, contentDescription = "Delete", tint = MaterialTheme.colorScheme.error)
+                Icon(Icons.Filled.Delete, contentDescription = AppStrings.text("Delete"), tint = MaterialTheme.colorScheme.error)
             }
         }
     )
@@ -184,22 +185,22 @@ private fun AddLeaseDialog(
 
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("Add static lease") },
+        title = { Text(AppStrings.text("Add static lease")) },
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                OutlinedTextField(value = name, onValueChange = { name = it }, label = { Text("Device name") }, singleLine = true)
-                OutlinedTextField(value = mac, onValueChange = { mac = it }, label = { Text("MAC address") }, singleLine = true)
-                OutlinedTextField(value = ip, onValueChange = { ip = it }, label = { Text("IP address") }, singleLine = true)
+                OutlinedTextField(value = name, onValueChange = { name = it }, label = { Text(AppStrings.text("Device name")) }, singleLine = true)
+                OutlinedTextField(value = mac, onValueChange = { mac = it }, label = { Text(AppStrings.text("MAC address")) }, singleLine = true)
+                OutlinedTextField(value = ip, onValueChange = { ip = it }, label = { Text(AppStrings.text("IP address")) }, singleLine = true)
             }
         },
         confirmButton = {
             TextButton(
                 onClick = { onConfirm(name.ifBlank { "Device" }, mac, ip) },
                 enabled = mac.isNotBlank() && ip.isNotBlank()
-            ) { Text("Add") }
+            ) { Text(AppStrings.text("Add")) }
         },
         dismissButton = {
-            TextButton(onClick = onDismiss) { Text("Cancel") }
+            TextButton(onClick = onDismiss) { Text(AppStrings.text("Cancel")) }
         }
     )
 }

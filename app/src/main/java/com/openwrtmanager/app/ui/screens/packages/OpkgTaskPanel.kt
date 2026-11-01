@@ -1,4 +1,5 @@
 package com.openwrtmanager.app.ui.screens.packages
+import com.openwrtmanager.app.ui.common.AppStrings
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -60,7 +61,7 @@ fun OpkgTaskPanel(
                 when (taskState) {
                     is OpkgTaskState.Running -> {
                         CircularProgressIndicator(modifier = Modifier.padding(end = 8.dp))
-                        Text("Running…", style = MaterialTheme.typography.titleMedium)
+                        Text(AppStrings.text("Running…"), style = MaterialTheme.typography.titleMedium)
                     }
                     is OpkgTaskState.Success -> {
                         Icon(Icons.Filled.CheckCircle, contentDescription = null, tint = Color(0xFF2E7D32))
@@ -118,7 +119,7 @@ fun OpkgTaskPanel(
                         .fillMaxWidth()
                         .padding(top = 16.dp)
                 ) {
-                    Text("Close")
+                    Text(AppStrings.text("Close"))
                 }
             }
         }

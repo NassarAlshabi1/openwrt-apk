@@ -1,4 +1,5 @@
 package com.openwrtmanager.app.ui.screens.packages
+import com.openwrtmanager.app.ui.common.AppStrings
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -27,7 +28,7 @@ data class PackagesUiState(
     // 空间检查用
     val rootfsFreeKb: Long = 0L,
 
-    // 点击"Install"后，先异步查询包详情（体积等），再展示确认对话框
+    // 点击AppStrings.text("Install")后，先异步查询包详情（体积等），再展示确认对话框
     val pendingInstallTarget: OpkgPackage? = null,
     val pendingInstallInfo: String? = null,
     val isFetchingPendingInstallInfo: Boolean = false,
@@ -122,7 +123,7 @@ class PackagesViewModel @Inject constructor(
         return sizeKb > freeKb * 0.9
     }
 
-    /** 用户点击"Install"时调用：弹出确认对话框并异步拉取包详情（含体积等），用于展示更完整的 opkg 体验 */
+    /** 用户点击AppStrings.text("Install")时调用：弹出确认对话框并异步拉取包详情（含体积等），用于展示更完整的 opkg 体验 */
     fun requestInstall(pkg: OpkgPackage) {
         _uiState.value = _uiState.value.copy(
             pendingInstallTarget = pkg,

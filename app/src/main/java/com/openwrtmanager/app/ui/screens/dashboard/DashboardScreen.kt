@@ -1,4 +1,6 @@
 package com.openwrtmanager.app.ui.screens.dashboard
+import com.openwrtmanager.app.ui.common.AppStrings
+import com.openwrtmanager.app.ui.common.LanguageManager
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -27,6 +29,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.openwrtmanager.app.data.model.SystemStatus
@@ -41,20 +44,27 @@ fun DashboardScreen(
     onLoggedOut: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val context = LocalContext.current
 
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
-                title = { Text("Router overview") },
+                title = { Text(AppStrings.text("Router overview")) },
                 actions = {
+                    TextButton(onClick = {
+                        LanguageManager.toggle(context)
+                        (context as? android.app.Activity)?.recreate()
+                    }) {
+                        Text(if (LanguageManager.isArabic()) "English" else "العربية")
+                    }
                     IconButton(onClick = viewModel::refresh) {
-                        Icon(Icons.Filled.Refresh, contentDescription = "Refresh")
+                        Icon(Icons.Filled.Refresh, contentDescription = AppStrings.text("Refresh"))
                     }
                     IconButton(onClick = {
                         viewModel.logout()
                         onLoggedOut()
                     }) {
-                        Icon(Icons.Filled.Logout, contentDescription = "Log out")
+                        Icon(Icons.Filled.Logout, contentDescription = AppStrings.text("Log out"))
                     }
                 }
             )
@@ -64,7 +74,7 @@ fun DashboardScreen(
             when {
                 uiState.isLoading && uiState.status == null -> FullScreenLoading()
                 uiState.errorMessage != null && uiState.status == null ->
-                    FullScreenError(uiState.errorMessage ?: "Loading failed", onRetry = viewModel::refresh)
+                    FullScreenError(uiState.errorMessage ?: AppStrings.text("Loading failed"), onRetry = viewModel::refresh)
                 uiState.status != null -> DashboardContent(
                     status = uiState.status!!,
                     onRebootClick = viewModel::requestReboot
@@ -76,15 +86,15 @@ fun DashboardScreen(
     if (uiState.rebootRequested) {
         AlertDialog(
             onDismissRequest = viewModel::cancelReboot,
-            title = { Text("Restart the router?") },
-            text = { Text("The network will be briefly interrupted and all devices will reconnect. This action cannot be undone.") },
+            title = { Text(AppStrings.text("Restart the router?")) },
+            text = { Text(AppStrings.text("The network will be briefly interrupted and all devices will reconnect. This action cannot be undone.")) },
             confirmButton = {
                 TextButton(onClick = viewModel::confirmReboot) {
-                    Text("Restart", color = MaterialTheme.colorScheme.error)
+                    Text(AppStrings.text("Restart"), color = MaterialTheme.colorScheme.error)
                 }
             },
             dismissButton = {
-                TextButton(onClick = viewModel::cancelReboot) { Text("Cancel") }
+                TextButton(onClick = viewModel::cancelReboot) { Text(AppStrings.text("Cancel")) }
             }
         )
     }
@@ -119,7 +129,7 @@ private fun DashboardContent(status: SystemStatus, onRebootClick: () -> Unit) {
         item {
             Card(modifier = Modifier.fillMaxWidth()) {
                 Column(modifier = Modifier.padding(16.dp)) {
-                    Text("Load average (1 / 5 / 15 min)", style = MaterialTheme.typography.titleSmall)
+                    Text(AppStrings.text("Load average (1 / 5 / 15 min)"), style = MaterialTheme.typography.titleSmall)
                     Text(
                         status.loadAverage.joinToString(" / ") { String.format("%.2f", it) },
                         style = MaterialTheme.typography.bodyMedium
@@ -131,7 +141,7 @@ private fun DashboardContent(status: SystemStatus, onRebootClick: () -> Unit) {
         item {
             Card(modifier = Modifier.fillMaxWidth()) {
                 Column(modifier = Modifier.padding(16.dp)) {
-                    Text("Memory usage", style = MaterialTheme.typography.titleSmall)
+                    Text(AppStrings.text("Memory usage"), style = MaterialTheme.typography.titleSmall)
                     LinearProgressIndicator(
                         progress = { status.memoryUsedPercent / 100f },
                         modifier = Modifier
@@ -150,7 +160,7 @@ private fun DashboardContent(status: SystemStatus, onRebootClick: () -> Unit) {
             item {
                 Card(modifier = Modifier.fillMaxWidth()) {
                     Column(modifier = Modifier.padding(16.dp)) {
-                        Text("Storage (used to check package installation)", style = MaterialTheme.typography.titleSmall)
+                        Text(AppStrings.text("Storage (used to check package installation)"), style = MaterialTheme.typography.titleSmall)
                         LinearProgressIndicator(
                             progress = { status.rootfsUsedPercent / 100f },
                             modifier = Modifier
@@ -175,7 +185,7 @@ private fun DashboardContent(status: SystemStatus, onRebootClick: () -> Unit) {
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Column {
-                        Text("Restart router", style = MaterialTheme.typography.titleSmall)
+                        Text(AppStrings.text("Restart router"), style = MaterialTheme.typography.titleSmall)
                         Text(
                             "Dangerous operation; the network will be briefly interrupted",
                             style = MaterialTheme.typography.bodySmall,
@@ -185,7 +195,7 @@ private fun DashboardContent(status: SystemStatus, onRebootClick: () -> Unit) {
                     IconButton(onClick = onRebootClick) {
                         Icon(
                             Icons.Filled.PowerSettingsNew,
-                            contentDescription = "Restart",
+                            contentDescription = AppStrings.text("Restart"),
                             tint = MaterialTheme.colorScheme.error
                         )
                     }

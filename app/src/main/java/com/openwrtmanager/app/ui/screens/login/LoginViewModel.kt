@@ -1,4 +1,5 @@
 package com.openwrtmanager.app.ui.screens.login
+import com.openwrtmanager.app.ui.common.AppStrings
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -67,7 +68,7 @@ class LoginViewModel @Inject constructor(
     fun login() {
         val state = _uiState.value
         if (state.baseUrl.isBlank() || state.username.isBlank()) {
-            update { it.copy(errorMessage = "Enter the router address and username") }
+            update { it.copy(errorMessage = AppStrings.text("Enter the router address and username")) }
             return
         }
         update { it.copy(isLoading = true, errorMessage = null) }
@@ -97,7 +98,7 @@ class LoginViewModel @Inject constructor(
                     it.copy(isLoading = false, errorMessage = outcome.message)
                 }
                 is LoginOutcome.NetworkFailure -> update {
-                    it.copy(isLoading = false, errorMessage = "Connection failed: ${outcome.message}")
+                    it.copy(isLoading = false, errorMessage = AppStrings.text("Connection failed: ${outcome.message}"))
                 }
                 is LoginOutcome.OtherError -> update {
                     it.copy(isLoading = false, errorMessage = outcome.message)

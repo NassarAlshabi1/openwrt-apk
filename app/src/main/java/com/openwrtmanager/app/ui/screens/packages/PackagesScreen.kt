@@ -1,4 +1,5 @@
 package com.openwrtmanager.app.ui.screens.packages
+import com.openwrtmanager.app.ui.common.AppStrings
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -54,10 +55,10 @@ fun PackagesScreen(viewModel: PackagesViewModel = hiltViewModel()) {
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
-                title = { Text("Package management") },
+                title = { Text(AppStrings.text("Package management")) },
                 actions = {
                     IconButton(onClick = viewModel::runUpdate) {
-                        Icon(Icons.Filled.Sync, contentDescription = "Update package index (opkg update)")
+                        Icon(Icons.Filled.Sync, contentDescription = AppStrings.text("Update package index (opkg update)"))
                     }
                 }
             )
@@ -68,17 +69,17 @@ fun PackagesScreen(viewModel: PackagesViewModel = hiltViewModel()) {
                 Tab(
                     selected = uiState.selectedTab == PackagesTab.INSTALLED,
                     onClick = { viewModel.selectTab(PackagesTab.INSTALLED) },
-                    text = { Text("Installed") }
+                    text = { Text(AppStrings.text("Installed")) }
                 )
                 Tab(
                     selected = uiState.selectedTab == PackagesTab.UPGRADABLE,
                     onClick = { viewModel.selectTab(PackagesTab.UPGRADABLE) },
-                    text = { Text("Upgradable (${uiState.upgradable.size})") }
+                    text = { Text(AppStrings.text("Upgradable (${uiState.upgradable.size})")) }
                 )
                 Tab(
                     selected = uiState.selectedTab == PackagesTab.SEARCH,
                     onClick = { viewModel.selectTab(PackagesTab.SEARCH) },
-                    text = { Text("Search and install") }
+                    text = { Text(AppStrings.text("Search and install")) }
                 )
             }
 
@@ -90,7 +91,7 @@ fun PackagesScreen(viewModel: PackagesViewModel = hiltViewModel()) {
                     onRetry = { viewModel.selectTab(PackagesTab.INSTALLED) },
                     trailingAction = { pkg ->
                         IconButton(onClick = { pendingRemove = pkg }) {
-                            Icon(Icons.Filled.Delete, contentDescription = "Uninstall", tint = MaterialTheme.colorScheme.error)
+                            Icon(Icons.Filled.Delete, contentDescription = AppStrings.text("Uninstall"), tint = MaterialTheme.colorScheme.error)
                         }
                     }
                 )
@@ -104,7 +105,7 @@ fun PackagesScreen(viewModel: PackagesViewModel = hiltViewModel()) {
                         ) {
                             TextButton(onClick = viewModel::upgradeAll) {
                                 Icon(Icons.Filled.Upgrade, contentDescription = null)
-                                Text(" Upgrade all")
+                                Text(AppStrings.text(" Upgrade all"))
                             }
                         }
                     }
@@ -115,7 +116,7 @@ fun PackagesScreen(viewModel: PackagesViewModel = hiltViewModel()) {
                         onRetry = { viewModel.selectTab(PackagesTab.UPGRADABLE) },
                         trailingAction = { pkg ->
                             IconButton(onClick = { viewModel.upgradePackage(pkg.name) }) {
-                                Icon(Icons.Filled.Upgrade, contentDescription = "Upgrade")
+                                Icon(Icons.Filled.Upgrade, contentDescription = AppStrings.text("Upgrade"))
                             }
                         }
                     )
@@ -130,12 +131,12 @@ fun PackagesScreen(viewModel: PackagesViewModel = hiltViewModel()) {
                         OutlinedTextField(
                             value = uiState.searchQuery,
                             onValueChange = viewModel::onSearchQueryChange,
-                            label = { Text("Search packages") },
+                            label = { Text(AppStrings.text("Search packages")) },
                             modifier = Modifier.weight(1f),
                             singleLine = true
                         )
                         IconButton(onClick = viewModel::search) {
-                            Icon(Icons.Filled.Search, contentDescription = "Search")
+                            Icon(Icons.Filled.Search, contentDescription = AppStrings.text("Search"))
                         }
                     }
                     PackageListContent(
@@ -145,7 +146,7 @@ fun PackagesScreen(viewModel: PackagesViewModel = hiltViewModel()) {
                         onRetry = viewModel::search,
                         trailingAction = { pkg ->
                             IconButton(onClick = { viewModel.requestInstall(pkg) }) {
-                                Icon(Icons.Filled.CloudDownload, contentDescription = "Install")
+                                Icon(Icons.Filled.CloudDownload, contentDescription = AppStrings.text("Install"))
                             }
                         }
                     )
@@ -166,11 +167,11 @@ fun PackagesScreen(viewModel: PackagesViewModel = hiltViewModel()) {
         val spaceWarning = viewModel.isPendingInstallSpaceLikelyInsufficient()
         AlertDialog(
             onDismissRequest = viewModel::cancelPendingInstall,
-            title = { Text("Install ${pkg.name}？") },
+            title = { Text(AppStrings.text("Install ${pkg.name}？")) },
             text = {
                 Column {
                     if (pkg.description.isNotBlank()) Text(pkg.description)
-                    Text("Version: ${pkg.version}", style = MaterialTheme.typography.bodySmall)
+                    Text(AppStrings.text("Version: ${pkg.version}"), style = MaterialTheme.typography.bodySmall)
 
                     if (uiState.isFetchingPendingInstallInfo) {
                         Row(
@@ -178,7 +179,7 @@ fun PackagesScreen(viewModel: PackagesViewModel = hiltViewModel()) {
                             verticalAlignment = androidx.compose.ui.Alignment.CenterVertically
                         ) {
                             androidx.compose.material3.CircularProgressIndicator(modifier = Modifier.size(16.dp))
-                            Text(" Loading package details…", style = MaterialTheme.typography.bodySmall, modifier = Modifier.padding(start = 8.dp))
+                            Text(AppStrings.text(" Loading package details…"), style = MaterialTheme.typography.bodySmall, modifier = Modifier.padding(start = 8.dp))
                         }
                     } else if (uiState.pendingInstallInfo != null) {
                         Text(
@@ -209,10 +210,10 @@ fun PackagesScreen(viewModel: PackagesViewModel = hiltViewModel()) {
                 }
             },
             confirmButton = {
-                TextButton(onClick = viewModel::confirmPendingInstall) { Text("Install") }
+                TextButton(onClick = viewModel::confirmPendingInstall) { Text(AppStrings.text("Install")) }
             },
             dismissButton = {
-                TextButton(onClick = viewModel::cancelPendingInstall) { Text("Cancel") }
+                TextButton(onClick = viewModel::cancelPendingInstall) { Text(AppStrings.text("Cancel")) }
             }
         )
     }
@@ -221,16 +222,16 @@ fun PackagesScreen(viewModel: PackagesViewModel = hiltViewModel()) {
     pendingRemove?.let { pkg ->
         AlertDialog(
             onDismissRequest = { pendingRemove = null },
-            title = { Text("Uninstall ${pkg.name}？") },
-            text = { Text("Removing core packages (such as dropbear or uhttpd) may make the router unmanageable. Proceed with caution.") },
+            title = { Text(AppStrings.text("Uninstall ${pkg.name}？")) },
+            text = { Text(AppStrings.text("Removing core packages (such as dropbear or uhttpd) may make the router unmanageable. Proceed with caution.")) },
             confirmButton = {
                 TextButton(onClick = {
                     viewModel.removePackage(pkg.name)
                     pendingRemove = null
-                }) { Text("Uninstall", color = MaterialTheme.colorScheme.error) }
+                }) { Text(AppStrings.text("Uninstall"), color = MaterialTheme.colorScheme.error) }
             },
             dismissButton = {
-                TextButton(onClick = { pendingRemove = null }) { Text("Cancel") }
+                TextButton(onClick = { pendingRemove = null }) { Text(AppStrings.text("Cancel")) }
             }
         )
     }
@@ -254,7 +255,7 @@ private fun PackageListContent(
             horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            Text("No data", textAlign = TextAlign.Center, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Text(AppStrings.text("No data"), textAlign = TextAlign.Center, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
         else -> LazyColumn(
             contentPadding = PaddingValues(bottom = 16.dp),

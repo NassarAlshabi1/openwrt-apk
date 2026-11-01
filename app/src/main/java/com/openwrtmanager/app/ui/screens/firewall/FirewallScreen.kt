@@ -1,4 +1,5 @@
 package com.openwrtmanager.app.ui.screens.firewall
+import com.openwrtmanager.app.ui.common.AppStrings
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -55,15 +56,15 @@ fun FirewallScreen(viewModel: FirewallViewModel = hiltViewModel()) {
 
     LaunchedEffect(uiState.hasPendingChanges) {
         if (uiState.hasPendingChanges) {
-            snackbarHostState.showSnackbar("Unsaved changes", withDismissAction = false)
+            snackbarHostState.showSnackbar(AppStrings.text("Unsaved changes"), withDismissAction = false)
         }
     }
 
     Scaffold(
-        topBar = { CenterAlignedTopAppBar(title = { Text("Firewall") }) },
+        topBar = { CenterAlignedTopAppBar(title = { Text(AppStrings.text("Firewall")) }) },
         floatingActionButton = {
             FloatingActionButton(onClick = { showAddDialog = true }) {
-                Icon(Icons.Filled.Add, contentDescription = "Add rule")
+                Icon(Icons.Filled.Add, contentDescription = AppStrings.text("Add rule"))
             }
         },
         snackbarHost = { SnackbarHost(snackbarHostState) }
@@ -71,7 +72,7 @@ fun FirewallScreen(viewModel: FirewallViewModel = hiltViewModel()) {
         Column(modifier = Modifier.padding(padding)) {
             when {
                 uiState.isLoading -> FullScreenLoading()
-                uiState.errorMessage != null -> FullScreenError(uiState.errorMessage ?: "Loading failed", onRetry = viewModel::refresh)
+                uiState.errorMessage != null -> FullScreenError(uiState.errorMessage ?: AppStrings.text("Loading failed"), onRetry = viewModel::refresh)
                 else -> {
                     if (uiState.hasPendingChanges) {
                         PendingChangesBar(
@@ -124,16 +125,16 @@ fun FirewallScreen(viewModel: FirewallViewModel = hiltViewModel()) {
     pendingDelete?.let { rule ->
         AlertDialog(
             onDismissRequest = { pendingDelete = null },
-            title = { Text("Delete rule “${rule.name}”？") },
-            text = { Text("Click “Apply changes” after deletion for it to take effect.") },
+            title = { Text(AppStrings.text("Delete rule “${rule.name}”？")) },
+            text = { Text(AppStrings.text("Click “Apply changes” after deletion for it to take effect.")) },
             confirmButton = {
                 TextButton(onClick = {
                     viewModel.deleteRule(rule)
                     pendingDelete = null
-                }) { Text("Delete", color = MaterialTheme.colorScheme.error) }
+                }) { Text(AppStrings.text("Delete"), color = MaterialTheme.colorScheme.error) }
             },
             dismissButton = {
-                TextButton(onClick = { pendingDelete = null }) { Text("Cancel") }
+                TextButton(onClick = { pendingDelete = null }) { Text(AppStrings.text("Cancel")) }
             }
         )
     }
@@ -152,10 +153,10 @@ private fun PendingChangesBar(isApplying: Boolean, onApply: () -> Unit, onDiscar
                 .padding(12.dp),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Text("Unsaved changes", modifier = Modifier.padding(top = 8.dp))
+            Text(AppStrings.text("Unsaved changes"), modifier = Modifier.padding(top = 8.dp))
             Row {
-                TextButton(onClick = onDiscard, enabled = !isApplying) { Text("Discard") }
-                TextButton(onClick = onApply, enabled = !isApplying) { Text("Apply changes") }
+                TextButton(onClick = onDiscard, enabled = !isApplying) { Text(AppStrings.text("Discard")) }
+                TextButton(onClick = onApply, enabled = !isApplying) { Text(AppStrings.text("Apply changes")) }
             }
         }
     }
@@ -166,7 +167,7 @@ private fun ZoneItem(zone: FirewallZone) {
     ListItem(
         headlineContent = { Text(zone.name) },
         supportingContent = {
-            Text("Input: ${zone.input} · Output: ${zone.output} · Forward: ${zone.forward}" + if (zone.masq) " · NAT" else "")
+            Text(AppStrings.text("Input: ${zone.input} · Output: ${zone.output} · Forward: ${zone.forward}" + if (zone.masq) " · NAT" else ""))
         }
     )
 }
@@ -191,7 +192,7 @@ private fun RuleItem(rule: FirewallRule, onToggle: () -> Unit, onDelete: () -> U
             Row {
                 Switch(checked = rule.enabled, onCheckedChange = { onToggle() })
                 IconButton(onClick = onDelete) {
-                    Icon(Icons.Filled.Delete, contentDescription = "Delete", tint = MaterialTheme.colorScheme.error)
+                    Icon(Icons.Filled.Delete, contentDescription = AppStrings.text("Delete"), tint = MaterialTheme.colorScheme.error)
                 }
             }
         }
@@ -213,15 +214,15 @@ private fun AddRuleDialog(
 
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("Add firewall rule") },
+        title = { Text(AppStrings.text("Add firewall rule")) },
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                OutlinedTextField(value = name, onValueChange = { name = it }, label = { Text("Rule name") }, singleLine = true)
-                OutlinedTextField(value = src, onValueChange = { src = it }, label = { Text("Source zone (e.g. wan)") }, singleLine = true)
-                OutlinedTextField(value = dest, onValueChange = { dest = it }, label = { Text("Destination zone (e.g. lan)") }, singleLine = true)
-                OutlinedTextField(value = port, onValueChange = { port = it }, label = { Text("Destination port (optional)") }, singleLine = true)
-                OutlinedTextField(value = proto, onValueChange = { proto = it }, label = { Text("Protocol (tcp/udp)") }, singleLine = true)
-                OutlinedTextField(value = target, onValueChange = { target = it }, label = { Text("Action (ACCEPT/REJECT/DROP)") }, singleLine = true)
+                OutlinedTextField(value = name, onValueChange = { name = it }, label = { Text(AppStrings.text("Rule name")) }, singleLine = true)
+                OutlinedTextField(value = src, onValueChange = { src = it }, label = { Text(AppStrings.text("Source zone (e.g. wan)")) }, singleLine = true)
+                OutlinedTextField(value = dest, onValueChange = { dest = it }, label = { Text(AppStrings.text("Destination zone (e.g. lan)")) }, singleLine = true)
+                OutlinedTextField(value = port, onValueChange = { port = it }, label = { Text(AppStrings.text("Destination port (optional)")) }, singleLine = true)
+                OutlinedTextField(value = proto, onValueChange = { proto = it }, label = { Text(AppStrings.text("Protocol (tcp/udp)")) }, singleLine = true)
+                OutlinedTextField(value = target, onValueChange = { target = it }, label = { Text(AppStrings.text("Action (ACCEPT/REJECT/DROP)")) }, singleLine = true)
             }
         },
         confirmButton = {
@@ -237,10 +238,10 @@ private fun AddRuleDialog(
                     )
                 },
                 enabled = name.isNotBlank()
-            ) { Text("Add") }
+            ) { Text(AppStrings.text("Add")) }
         },
         dismissButton = {
-            TextButton(onClick = onDismiss) { Text("Cancel") }
+            TextButton(onClick = onDismiss) { Text(AppStrings.text("Cancel")) }
         }
     )
 }

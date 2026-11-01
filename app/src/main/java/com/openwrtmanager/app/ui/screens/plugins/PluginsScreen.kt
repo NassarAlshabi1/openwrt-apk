@@ -1,4 +1,5 @@
 package com.openwrtmanager.app.ui.screens.plugins
+import com.openwrtmanager.app.ui.common.AppStrings
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.PaddingValues
@@ -36,11 +37,11 @@ fun PluginsScreen(
     val uiState by viewModel.uiState.collectAsState()
 
     Scaffold(
-        topBar = { CenterAlignedTopAppBar(title = { Text("Plugins") }) }
+        topBar = { CenterAlignedTopAppBar(title = { Text(AppStrings.text("Plugins")) }) }
     ) { padding ->
         when {
             uiState.isLoading -> FullScreenLoading()
-            uiState.errorMessage != null -> FullScreenError(uiState.errorMessage ?: "Loading failed", onRetry = viewModel::refresh)
+            uiState.errorMessage != null -> FullScreenError(uiState.errorMessage ?: AppStrings.text("Loading failed"), onRetry = viewModel::refresh)
             uiState.plugins.isEmpty() -> androidx.compose.foundation.layout.Column(
                 modifier = Modifier
                     .fillMaxSize()

@@ -1,4 +1,5 @@
 package com.openwrtmanager.app.ui.screens.plugins
+import com.openwrtmanager.app.ui.common.AppStrings
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -49,7 +50,7 @@ fun PluginDetailScreen(
                 title = { Text(plugin.packageName) },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = AppStrings.text("Back"))
                     }
                 }
             )
@@ -72,11 +73,11 @@ fun PluginDetailScreen(
 
             Card(modifier = Modifier.fillMaxWidth()) {
                 Column(modifier = Modifier.padding(16.dp)) {
-                    Text("Package name", style = MaterialTheme.typography.labelMedium)
+                    Text(AppStrings.text("Package name"), style = MaterialTheme.typography.labelMedium)
                     Text(plugin.packageName, style = MaterialTheme.typography.bodyLarge)
 
                     Text(
-                        "Version",
+                        AppStrings.text("Version"),
                         style = MaterialTheme.typography.labelMedium,
                         modifier = Modifier.padding(top = 12.dp)
                     )
@@ -84,7 +85,7 @@ fun PluginDetailScreen(
 
                     if (plugin.description.isNotBlank()) {
                         Text(
-                            "Description",
+                            AppStrings.text("Description"),
                             style = MaterialTheme.typography.labelMedium,
                             modifier = Modifier.padding(top = 12.dp)
                         )

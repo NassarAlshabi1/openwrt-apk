@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import com.openwrtmanager.app.data.remote.UbusClientManager
 import com.openwrtmanager.app.ui.AppNavHost
+import com.openwrtmanager.app.ui.common.LanguageManager
 import com.openwrtmanager.app.ui.theme.OpenWrtManagerTheme
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -18,6 +19,7 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        LanguageManager.applySavedLanguage(this)
         enableEdgeToEdge()
         setContent {
             OpenWrtManagerTheme {

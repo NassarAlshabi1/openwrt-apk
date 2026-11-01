@@ -1,4 +1,5 @@
 package com.openwrtmanager.app.ui.common
+import com.openwrtmanager.app.ui.common.AppStrings
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Dashboard
@@ -25,11 +26,11 @@ data class BottomNavItem(
 )
 
 private val bottomNavItems = listOf(
-    BottomNavItem(Routes.DASHBOARD, "Dashboard", Icons.Filled.Dashboard),
-    BottomNavItem(Routes.PACKAGES, "Packages", Icons.Filled.Inventory2),
-    BottomNavItem(Routes.PLUGINS, "Plugins", Icons.Filled.Extension),
-    BottomNavItem(Routes.FIREWALL, "Firewall", Icons.Filled.Security),
-    BottomNavItem(Routes.DHCP, "DHCP", Icons.Filled.Dns)
+    BottomNavItem(Routes.DASHBOARD, AppStrings.text("Dashboard"), Icons.Filled.Dashboard),
+    BottomNavItem(Routes.PACKAGES, AppStrings.text("Packages"), Icons.Filled.Inventory2),
+    BottomNavItem(Routes.PLUGINS, AppStrings.text("Plugins"), Icons.Filled.Extension),
+    BottomNavItem(Routes.FIREWALL, AppStrings.text("Firewall"), Icons.Filled.Security),
+    BottomNavItem(Routes.DHCP, AppStrings.text("DHCP"), Icons.Filled.Dns)
 )
 
 @Composable

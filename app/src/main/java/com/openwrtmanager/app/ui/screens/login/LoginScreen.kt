@@ -1,4 +1,5 @@
 package com.openwrtmanager.app.ui.screens.login
+import com.openwrtmanager.app.ui.common.AppStrings
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -41,6 +42,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -48,6 +50,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.openwrtmanager.app.data.model.RouterProfile
+import com.openwrtmanager.app.ui.common.LanguageManager
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -58,6 +61,7 @@ fun LoginScreen(
     val uiState by viewModel.uiState.collectAsState()
     val profiles by viewModel.savedProfiles.collectAsState()
     var passwordVisible by remember { mutableStateOf(false) }
+    val context = LocalContext.current
 
     LaunchedEffect(uiState.loginSucceeded) {
         if (uiState.loginSucceeded) onLoginSuccess()
@@ -73,6 +77,17 @@ fun LoginScreen(
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             item {
+                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
+                    TextButton(onClick = {
+                        LanguageManager.toggle(context)
+                        (context as? android.app.Activity)?.recreate()
+                    }) {
+                        Text(if (LanguageManager.isArabic()) "English" else "العربية")
+                    }
+                }
+            }
+
+            item {
                 Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth()) {
                     Icon(
                         Icons.Filled.Router,
@@ -81,9 +96,9 @@ fun LoginScreen(
                         tint = MaterialTheme.colorScheme.primary
                     )
                     Spacer(Modifier.height(8.dp))
-                    Text("Connect to your OpenWrt router", style = MaterialTheme.typography.titleLarge)
+                    Text(AppStrings.text("Connect to your OpenWrt router"), style = MaterialTheme.typography.titleLarge)
                     Text(
-                        "Sign in with your LuCI administrator account",
+                        AppStrings.text("Sign in with your LuCI administrator account"),
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -94,7 +109,7 @@ fun LoginScreen(
                 OutlinedTextField(
                     value = uiState.name,
                     onValueChange = viewModel::onNameChange,
-                    label = { Text("Name (optional, e.g. Home router)") },
+                    label = { Text(AppStrings.text("Name (optional, e.g. Home router)")) },
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true
                 )
@@ -104,7 +119,7 @@ fun LoginScreen(
                 OutlinedTextField(
                     value = uiState.baseUrl,
                     onValueChange = viewModel::onBaseUrlChange,
-                    label = { Text("Router address") },
+                    label = { Text(AppStrings.text("Router address")) },
                     placeholder = { Text("http://192.168.1.1") },
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true,
@@ -116,7 +131,7 @@ fun LoginScreen(
                 OutlinedTextField(
                     value = uiState.username,
                     onValueChange = viewModel::onUsernameChange,
-                    label = { Text("Username") },
+                    label = { Text(AppStrings.text("Username")) },
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true
                 )
@@ -126,7 +141,7 @@ fun LoginScreen(
                 OutlinedTextField(
                     value = uiState.password,
                     onValueChange = viewModel::onPasswordChange,
-                    label = { Text("Password") },
+                    label = { Text(AppStrings.text("Password")) },
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true,
                     visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
@@ -145,7 +160,7 @@ fun LoginScreen(
             if (uiState.errorMessage != null) {
                 item {
                     Text(
-                        text = uiState.errorMessage ?: "",
+                        text = AppStrings.text(uiState.errorMessage ?: ""),
                         color = MaterialTheme.colorScheme.error,
                         style = MaterialTheme.typography.bodyMedium
                     )
@@ -163,7 +178,7 @@ fun LoginScreen(
                     if (uiState.isLoading) {
                         CircularProgressIndicator(modifier = Modifier.size(20.dp), color = MaterialTheme.colorScheme.onPrimary)
                     } else {
-                        Text("Sign in")
+                        Text(AppStrings.text("Sign in"))
                     }
                 }
             }
@@ -171,7 +186,7 @@ fun LoginScreen(
             if (profiles.isNotEmpty()) {
                 item {
                     Text(
-                        "Saved connections",
+                        AppStrings.text("Saved connections"),
                         style = MaterialTheme.typography.titleSmall,
                         modifier = Modifier.padding(top = 8.dp)
                     )
@@ -199,12 +214,12 @@ private fun SavedProfileItem(
             headlineContent = { Text(profile.name) },
             supportingContent = { Text("${profile.username}@${profile.baseUrl}") },
             trailingContent = {
-                TextButton(onClick = onDelete) { Text("Delete") }
+                TextButton(onClick = onDelete) { Text(AppStrings.text("Delete")) }
             },
             modifier = Modifier.fillMaxWidth()
         )
         Row(modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 4.dp)) {
-            TextButton(onClick = onClick) { Text("Fill form") }
+            TextButton(onClick = onClick) { Text(AppStrings.text("Fill form")) }
         }
     }
 }
