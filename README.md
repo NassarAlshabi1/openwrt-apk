@@ -76,6 +76,26 @@ di/             Hilt 模块
 - 默认信任局域网明文 HTTP；如果路由器配置了自签 HTTPS 证书，目前依赖 Android 系统的
   用户信任证书存储（需要用户手动导入证书），尚未做应用内的证书指纹确认 UI。
 
+## Language support
+
+The app starts in English and includes an Arabic interface. English is also the
+fallback for every untranslated string. The language preference is saved on the
+device and can be switched from the app's language control.
+
 ## GitHub Actions release
 
-The `Build and publish APK` workflow builds the unsigned `release` variant and publishes the APK and SHA-256 checksum to GitHub Releases. Run it manually from the Actions tab, or push a tag matching `v*`. The Android UI is provided in English.
+The `Build and publish APK` workflow builds, signs, verifies, and publishes the
+APK plus a SHA-256 checksum to GitHub Releases. Run it manually from the Actions
+tab, or push a tag matching `v*`.
+
+For stable updates, configure these repository Actions secrets once:
+
+- `ANDROID_KEYSTORE_BASE64`: base64-encoded release keystore
+- `ANDROID_KEYSTORE_PASSWORD`: keystore password
+- `ANDROID_KEY_ALIAS`: signing key alias
+- `ANDROID_KEY_PASSWORD`: signing key password
+
+If `ANDROID_KEYSTORE_BASE64` is not configured, the workflow creates a temporary
+signing key so the APK is still installable. However, that key changes on every
+run, so users cannot update an earlier APK over it; configure the secrets before
+publishing a production release.
