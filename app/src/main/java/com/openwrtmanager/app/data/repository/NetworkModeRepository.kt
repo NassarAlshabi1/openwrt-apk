@@ -43,23 +43,24 @@ class NetworkModeRepository @Inject constructor(
     }
 
     private fun validate(c: NetworkModeConfig): Result<Unit> {
-        fun required(value: String, name: String): Result<Unit> =
-            if (value.isBlank()) Result.failure(IllegalArgumentException("$name is required")) else Result.success(Unit)
-        return when (c.mode) {
-            NetworkMode.WDS_BRIDGE -> {
-                required(c.upstreamSsid, "Upstream SSID").getOrElse { return Result.failure(it) }
-                required(c.upstreamPassword, "Wi-Fi password").getOrElse { return Result.failure(it) }
-            }
-            NetworkMode.MESH_80211S -> {
-                required(c.meshId, "Mesh ID").getOrElse { return Result.failure(it) }
-                required(c.meshPassword, "Mesh password").getOrElse { return Result.failure(it) }
-            }
-            NetworkMode.REPEATER_RELAYD -> {
-                required(c.upstreamSsid, "Upstream SSID").getOrElse { return Result.failure(it) }
-                required(c.upstreamPassword, "Upstream password").getOrElse { return Result.failure(it) }
-                required(c.localSsid, "Local SSID").getOrElse { return Result.failure(it) }
-                required(c.localPassword, "Local password").getOrElse { return Result.failure(it) }
-            }
+        val requiredFields = when (c.mode) {
+            NetworkMode.WDS_BRIDGE -> listOf(
+                c.upstreamSsid to "Upstream SSID",
+                c.upstreamPassword to "Wi-Fi password"
+            )
+            NetworkMode.MESH_80211S -> listOf(
+                c.meshId to "Mesh ID",
+                c.meshPassword to "Mesh password"
+            )
+            NetworkMode.REPEATER_RELAYD -> listOf(
+                c.upstreamSsid to "Upstream SSID",
+                c.upstreamPassword to "Upstream password",
+                c.localSsid to "Local SSID",
+                c.localPassword to "Local password"
+            )
+        }
+        requiredFields.firstOrNull { it.first.isBlank() }?.let { (_, name) ->
+            return Result.failure(IllegalArgumentException("$name is required"))
         }
         return Result.success(Unit)
     }

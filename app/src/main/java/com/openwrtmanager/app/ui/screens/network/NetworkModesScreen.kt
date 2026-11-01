@@ -30,7 +30,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.openwrtmanager.app.data.model.NetworkMode
 import com.openwrtmanager.app.ui.common.AppStrings
 
-@androidx.compose.material3.ExperimentalMaterial3Api
+@OptIn(androidx.compose.material3.ExperimentalMaterial3Api::class)
 @Composable
 fun NetworkModesScreen(viewModel: NetworkModesViewModel = hiltViewModel()) {
     val state by viewModel.state.collectAsState()
