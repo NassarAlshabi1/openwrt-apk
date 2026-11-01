@@ -26,6 +26,7 @@ import com.openwrtmanager.app.ui.screens.packages.PackagesScreen
 import com.openwrtmanager.app.ui.screens.plugins.PluginDetailScreen
 import com.openwrtmanager.app.ui.screens.plugins.PluginsScreen
 import com.openwrtmanager.app.ui.screens.plugins.PluginsViewModel
+import com.openwrtmanager.app.ui.screens.network.NetworkModesScreen
 import java.net.URLDecoder
 import java.net.URLEncoder
 
@@ -48,7 +49,9 @@ fun AppNavHost(
 
         composable(Routes.DASHBOARD) {
             MainScaffold(navController) {
-                DashboardScreen(onLoggedOut = {
+                DashboardScreen(onOpenNetworkModes = {
+                    navController.navigate(Routes.NETWORK_MODES)
+                }, onLoggedOut = {
                     navController.navigate(Routes.LOGIN) {
                         popUpTo(0) { inclusive = true }
                     }
@@ -107,6 +110,10 @@ fun AppNavHost(
 
         composable(Routes.DHCP) {
             MainScaffold(navController) { DhcpScreen() }
+        }
+
+        composable(Routes.NETWORK_MODES) {
+            MainScaffold(navController) { NetworkModesScreen() }
         }
     }
 }

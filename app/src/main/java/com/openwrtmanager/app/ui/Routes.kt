@@ -8,6 +8,7 @@ object Routes {
     const val PLUGIN_DETAIL = "plugin_detail/{packageName}"
     const val FIREWALL = "firewall"
     const val DHCP = "dhcp"
+    const val NETWORK_MODES = "network_modes"
     const val SETTINGS = "settings"
 
     fun pluginDetail(packageName: String) = "plugin_detail/$packageName"

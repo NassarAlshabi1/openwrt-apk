@@ -14,6 +14,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Logout
 import androidx.compose.material.icons.filled.PowerSettingsNew
 import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.filled.SettingsEthernet
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -41,6 +42,7 @@ import java.util.concurrent.TimeUnit
 @Composable
 fun DashboardScreen(
     viewModel: DashboardViewModel = hiltViewModel(),
+    onOpenNetworkModes: () -> Unit = {},
     onLoggedOut: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -77,7 +79,8 @@ fun DashboardScreen(
                     FullScreenError(uiState.errorMessage ?: AppStrings.text("Loading failed"), onRetry = viewModel::refresh)
                 uiState.status != null -> DashboardContent(
                     status = uiState.status!!,
-                    onRebootClick = viewModel::requestReboot
+                    onRebootClick = viewModel::requestReboot,
+                    onOpenNetworkModes = onOpenNetworkModes
                 )
             }
         }
@@ -101,7 +104,7 @@ fun DashboardScreen(
 }
 
 @Composable
-private fun DashboardContent(status: SystemStatus, onRebootClick: () -> Unit) {
+private fun DashboardContent(status: SystemStatus, onRebootClick: () -> Unit, onOpenNetworkModes: () -> Unit) {
     LazyColumn(
         contentPadding = PaddingValues(16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp),
@@ -171,6 +174,25 @@ private fun DashboardContent(status: SystemStatus, onRebootClick: () -> Unit) {
                             AppStrings.text("${status.rootfsUsedPercent}% used · remaining ${status.rootfsFreeKb / 1024} MB"),
                             style = MaterialTheme.typography.bodySmall
                         )
+                    }
+                }
+            }
+        }
+
+        item {
+            Card(modifier = Modifier.fillMaxWidth()) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Column {
+                        Text(AppStrings.text("Network modes"), style = MaterialTheme.typography.titleSmall)
+                        Text(AppStrings.text("WDS, Mesh 802.11s, or Repeater/RelayD"), style = MaterialTheme.typography.bodySmall)
+                    }
+                    IconButton(onClick = onOpenNetworkModes) {
+                        Icon(Icons.Filled.SettingsEthernet, contentDescription = AppStrings.text("Network modes"))
                     }
                 }
             }

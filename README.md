@@ -40,6 +40,26 @@
 - **防火墙 (Firewall)**：查看区域(Zone)、管理规则(Rule)（增/删/启用禁用），改动需要显式点击
   "应用改动"才会 commit + reload 到实际生效（对应真实 LuCI 的"未保存的改动"机制）。
 - **DHCP**：DHCP 池启停、静态租约(MAC-IP 绑定)增删。
+- **Network modes**: a guided setup for fixed-router WDS Bridge, multi-node
+  802.11s Mesh, and Repeater/RelayD. The wizard installs the required LuCI/
+  OpenWrt packages, backs up `/etc/config/network` and `/etc/config/wireless`,
+  then applies and reloads the UCI configuration after explicit confirmation.
+
+### Network mode package presets
+
+- WDS Bridge: `luci-app-wireless`; both the upstream AP and this router must
+  support and enable WDS, with matching wireless security and channel settings.
+- Mesh 802.11s: `wpad-mesh-mbedtls` and `luci-proto-batman-adv`; every node must
+  use compatible Wi-Fi security, channel, Mesh ID, and password.
+- Repeater / RelayD: `relayd` and `luci-proto-relay`; this is intended for an
+  upstream router whose settings you cannot change. It uses a DHCP client on
+  `wwan` and a relay interface, so the LAN IP must not conflict with the
+  upstream subnet.
+
+Network changes can disconnect the active session. The app deliberately shows a
+warning and requires confirmation before applying them. The backup is stored on
+the router at `/root/openwrt-manager-backup`; restore those files through LuCI
+or SSH if a generated configuration is incompatible with the device.
 
 ## 架构
 
